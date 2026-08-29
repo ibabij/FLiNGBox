@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FLiNG Box - 风灵月影修改器盒子</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/animations.css">
+</head>
+<body class="theme-dark">
+  <div id="app" class="app-container">
+    <!-- Custom Draggable Titlebar -->
+    <header class="titlebar">
+      <div class="titlebar-drag-region">
+        <div class="app-brand">
+          <div class="brand-icon">
+            <img src="../assets/icon.png" alt="FLiNG Box Logo">
+          </div>
+          <span class="brand-name">FLiNG <span class="brand-sub">Box</span></span>
+          <span class="badge-tag">风灵盒子</span>
+        </div>
+      </div>
+
+      <div class="titlebar-center">
+        <div class="quick-search-box">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="global-search-input" placeholder="输入游戏英文/中文名快速搜索..." autocomplete="off">
+        </div>
+      </div>
+
+      <div class="titlebar-controls">
+        <button id="btn-minimize" class="win-btn" title="最小化">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        </button>
+        <button id="btn-maximize" class="win-btn" title="最大化">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"></rect></svg>
+        </button>
+        <button id="btn-close" class="win-btn win-close-btn" title="关闭">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Body Layout -->
+    <div class="main-layout">
+      <!-- Sidebar Navigation -->
+      <aside class="sidebar">
+        <nav class="nav-menu">
+          <div class="nav-group-title">发现 & 探索</div>
+          <button class="nav-item active" data-view="explore">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
+            <span>最新更新</span>
+          </button>
+          <button class="nav-item" data-view="az">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"></line><line x1="4" y1="12" x2="14" y2="12"></line><line x1="4" y1="18" x2="18" y2="18"></line></svg>
+            <span>A-Z 全量索引</span>
+          </button>
+          <button class="nav-item" data-view="search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <span>修改器搜索</span>
+          </button>
+
+          <div class="nav-group-title">管理 & 本地</div>
+          <button class="nav-item" data-view="downloads">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span>下载中心</span>
+            <span id="download-badge" class="badge-count hidden">0</span>
+          </button>
+          <button class="nav-item" data-view="library">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+            <span>我的修改器库</span>
+            <span id="library-badge" class="badge-count hidden">0</span>
+          </button>
+          <button class="nav-item" data-view="favorites">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <span>我的收藏</span>
+          </button>
+
+          <div class="nav-group-title">系统</div>
+          <button class="nav-item" data-view="settings">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            <span>设置</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="status-indicator">
+            <span class="status-dot online"></span>
+            <span class="status-text">flingtrainer.com 连通</span>
+          </div>
+          <button id="btn-open-official" class="btn-text-link" title="在浏览器打开官网">
+            <span>访问官网</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Content Area -->
+      <main class="content-container">
+        <!-- View 1: Explore (Latest) -->
+        <section id="view-explore" class="view-panel active">
+          <div class="view-header">
+            <div class="header-titles">
+              <h2>最新更新修改器</h2>
+              <p class="subtitle">实时同步 FLiNG Trainer 官方最新发布的修改器资源</p>
+            </div>
+            <div class="header-actions">
+              <button id="btn-refresh-explore" class="btn btn-secondary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                <span>刷新</span>
+              </button>
+            </div>
+          </div>
+
+          <div id="explore-content" class="cards-grid">
+            <!-- Dynamic Trainer Cards Inserted Here -->
+          </div>
+
+          <div class="pagination-bar" id="explore-pagination">
+            <button class="btn btn-secondary" id="btn-prev-page" disabled>上一页</button>
+            <span class="page-indicator" id="explore-page-text">第 1 页</span>
+            <button class="btn btn-secondary" id="btn-next-page">下一页</button>
+          </div>
+        </section>
+
+        <!-- View 2: A-Z Catalog -->
+        <section id="view-az" class="view-panel">
+          <div class="view-header">
+            <div class="header-titles">
+              <h2>A-Z 全量索引目录</h2>
+              <p class="subtitle">快速按首字母浏览与检索 1000+ 游戏修改器</p>
+            </div>
+            <div class="header-actions">
+              <input type="text" id="az-filter-input" class="input-search-inline" placeholder="在 A-Z 索引中筛选游戏...">
+            </div>
+          </div>
+
+          <!-- Letters Navigation Bar -->
+          <div class="az-alphabet-bar" id="az-alphabet-bar">
+            <!-- Letters buttons #, A, B, C... -->
+          </div>
+
+          <div class="az-content-container" id="az-content-container">
+            <!-- Dynamic A-Z Groups -->
+          </div>
+        </section>
+
+        <!-- View 3: Search -->
+        <section id="view-search" class="view-panel">
+          <div class="view-header">
+            <div class="header-titles">
+              <h2>修改器搜索</h2>
+              <p class="subtitle">⚡ 支持中文名直接检索（如“怪猎荒野”、“黑神话”、“老头环”、“2077”），系统将智能自动识别并检索</p>
+            </div>
+          </div>
+
+          <div class="search-hub-panel">
+            <div class="search-history-container" id="search-history-container">
+              <span class="history-label">历史搜索：</span>
+              <div class="history-tags" id="history-tags"></div>
+              <button id="btn-clear-history" class="btn-text-link">清空</button>
+            </div>
+
+            <div class="search-hot-container">
+              <span class="history-label">🔥 热门速搜：</span>
+              <div class="history-tags" id="hot-search-tags">
+                <span class="history-tag hot-tag">怪物猎人荒野</span>
+                <span class="history-tag hot-tag">黑神话悟空</span>
+                <span class="history-tag hot-tag">艾尔登法环</span>
+                <span class="history-tag hot-tag">赛博朋克2077</span>
+                <span class="history-tag hot-tag">生化危机4</span>
+                <span class="history-tag hot-tag">幻兽帕鲁</span>
+                <span class="history-tag hot-tag">荒野大镖客2</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="search-results-header">
+            <span id="search-result-count">请输入关键词开始搜索</span>
+          </div>
+
+          <div id="search-results-grid" class="cards-grid">
+            <!-- Search result cards -->
+          </div>
+
+          <div class="pagination-bar hidden" id="search-pagination">
+            <button class="btn btn-secondary" id="btn-search-prev" disabled>上一页</button>
+            <span class="page-indicator" id="search-page-text">第 1 页</span>
+            <button class="btn btn-secondary" id="btn-search-next">下一页</button>
+          </div>
+        </section>
+
+        <!-- View 4: Downloads -->
+        <section id="view-downloads" class="view-panel">
+          <div class="view-header">
+            <div class="header-titles">
+              <h2>下载中心</h2>
+              <p class="subtitle">管理正在进行与已完成的修改器下载任务</p>
+            </div>
+            <div class="header-actions">
+              <button id="btn-clear-completed-downloads" class="btn btn-secondary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                <span>清空已完成</span>
+              </button>
+              <button id="btn-open-download-dir" class="btn btn-secondary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                <span>打开下载目录</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="downloads-list" id="downloads-list">
+            <!-- Dynamic Download items -->
+          </div>
+        </section>
+
+        <!-- View 5: Library (Installed Trainers) -->
+        <section id="view-library" class="view-panel">
+          <div class="view-header">
+            <div class="header-titles">
+              <h2>我的修改器库</h2>
+              <p class="subtitle">已下载与已解压的本地修改器，支持一键极速启动</p>
+            </div>
+            <div class="header-actions">
+              <input type="text" id="library-search-input" class="input-search-inline" placeholder="在本地库中搜索...">
+            </div>
+          </div>
+
+          <div class="library-grid" id="library-grid">
+            <!-- Dynamic local library cards -->
+          </div>
+        </section>
+
+        <!-- View 6: Favorites -->
+        <section id="view-favorites" class="view-panel">
+          <div class="view-header">
+            <div class="header-titles">
+              <h2>我的收藏</h2>
+              <p class="subtitle">您收藏的游戏修改器列表，随时快速查看详情与下载</p>
+            </div>
+          </div>
+
+          <div class="cards-grid" id="favorites-grid">
+            <!-- Favorite cards -->
+          </div>
+        </section>
+
+        <!-- View 7: Settings -->
+        <section id="view-settings" class="view-panel">
+          <div class="view-header">
+            <div class="header-titles">
+              <h2>系统设置</h2>
+              <p class="subtitle">自定义下载存储路径、自动解压、网络代理及常规选项</p>
+            </div>
+          </div>
+
+          <div class="settings-container">
+            <!-- Section 1: Storage & Download -->
+            <div class="settings-card">
+              <h3 class="card-title">存储与下载</h3>
+              <div class="form-group">
+                <label>修改器存储目录</label>
+                <div class="input-action-group">
+                  <input type="text" id="setting-download-dir" readonly>
+                  <button id="btn-select-dir" class="btn btn-secondary">浏览...</button>
+                </div>
+                <p class="field-hint">下载的修改器压缩包及解压后的文件将保存在此目录下。</p>
+              </div>
+
+              <div class="form-group-toggle">
+                <div class="toggle-info">
+                  <span class="toggle-label">下载完成后自动解压</span>
+                  <span class="toggle-desc">下载完成后自动将 zip 文件解压为可直接执行的目录</span>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="setting-auto-extract">
+                  <span class="slider round"></span>
+                </label>
+              </div>
+
+              <div class="form-group-toggle">
+                <div class="toggle-info">
+                  <span class="toggle-label">从本地库移除时同时删除下载文件</span>
+                  <span class="toggle-desc">开启后，在“我的修改器”中点击删除时，自动删除磁盘上下载的文件与解压目录</span>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="setting-delete-files-on-remove" checked>
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Section 2: Network & Proxy -->
+            <div class="settings-card">
+              <h3 class="card-title">网络与代理加速</h3>
+              <div class="form-group">
+                <label>代理模式</label>
+                <select id="setting-proxy-mode" class="form-select">
+                  <option value="direct">直连模式 (Direct)</option>
+                  <option value="custom">自定义 HTTP / SOCKS5 代理</option>
+                </select>
+                <p class="field-hint">如遇国内网络无法直连或图片加载慢，可开启本地科学代理（例如 Clash / V2Ray）。</p>
+              </div>
+
+              <div class="form-group" id="group-custom-proxy">
+                <label>代理服务器地址</label>
+                <div class="input-action-group">
+                  <input type="text" id="setting-custom-proxy" placeholder="http://127.0.0.1:7897 或 http://127.0.0.1:10809">
+                  <button id="btn-test-proxy" class="btn btn-secondary">测试连通性</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Section 3: General -->
+            <div class="settings-card">
+              <h3 class="card-title">常规与关于</h3>
+              <div class="form-group-toggle">
+                <div class="toggle-info">
+                  <span class="toggle-label">游戏名称自动翻译为中文</span>
+                  <span class="toggle-desc">开启后，列表卡片与详情标题将尝试翻译为中文（⚠️ 提示：翻译由词库与机翻生成，未必完全准确，仅供参考）</span>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="setting-translate-game-titles">
+                  <span class="slider round"></span>
+                </label>
+              </div>
+
+              <div class="form-group-toggle">
+                <div class="toggle-info">
+                  <span class="toggle-label">点击关闭时最小化到系统托盘</span>
+                  <span class="toggle-desc">勾选后点击窗口右上角关闭按钮将最小化到任务栏托盘</span>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="setting-close-to-tray">
+                  <span class="slider round"></span>
+                </label>
+              </div>
+
+              <div class="about-box">
+                <div class="about-title">FLiNG Box v1.0.0</div>
+                <div class="about-text">
+                  本客户端为第三方开源桌面辅助工具，数据与修改器版权归属 <a href="#" id="link-about-fling">flingtrainer.com</a> (FLiNG) 所有。请仅用于单机游戏娱乐体验。
+                </div>
+              </div>
+            </div>
+
+            <!-- Section 4: Sponsor & Support -->
+            <div class="settings-card sponsor-card">
+              <div class="sponsor-header">
+                <div class="sponsor-icon-badge">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px; color: #f59e0b;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+                </div>
+                <div>
+                  <h3 class="card-title" style="margin-bottom: 2px;">☕ 打赏 / 赞赏作者</h3>
+                  <p class="field-hint" style="margin: 0;">如果您觉得这款桌面助手好用，欢迎扫码请作者喝杯咖啡，支持客户端后续持续维护与更新！</p>
+                </div>
+              </div>
+              <div class="sponsor-content">
+                <div class="sponsor-qr-wrap">
+                  <img src="../assets/sponsor_qr.png" alt="微信赞赏码" class="sponsor-qr-img">
+                  <div class="sponsor-qr-tag">
+                    <svg viewBox="0 0 24 24" fill="currentColor" style="width: 14px; height: 14px; color: #07c160;"><path d="M8.5 2C4.36 2 1 4.91 1 8.5c0 2.05 1.09 3.88 2.8 5.06l-.7 2.11a.5.5 0 0 0 .63.63l2.45-.82c.73.23 1.51.36 2.32.36.21 0 .42-.01.62-.03-.2-.59-.32-1.22-.32-1.87 0-3.31 3.13-6 7-6 .48 0 .94.04 1.39.13C16.48 4.28 12.82 2 8.5 2zM15.5 9c-3.59 0-6.5 2.46-6.5 5.5 0 1.74.96 3.29 2.46 4.3l-.58 1.74a.5.5 0 0 0 .63.63l2.02-.67c.62.19 1.28.3 1.97.3 3.59 0 6.5-2.46 6.5-5.5S19.09 9 15.5 9z"/></svg>
+                    <span>微信扫码打赏</span>
+                  </div>
+                </div>
+                <div class="sponsor-desc-box">
+                  <div class="sponsor-quote">
+                    “ 感谢每一位单机游戏玩家的认可与支持！您的鼓励是项目持续维护迭代的最大动力，祝大家游戏愉快、畅玩各类神作大作！🎮 ”
+                  </div>
+                  <div class="sponsor-perks">
+                    <div class="sponsor-perk-item">⚡ 实时同步官方最新游戏修改器与版本更新</div>
+                    <div class="sponsor-perk-item">🛠️ 永久纯净无捆绑、开源免费维护</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-save-bar">
+              <button id="btn-save-settings" class="btn btn-primary btn-large">保存设置</button>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Modal: Trainer Details Drawer / Dialog -->
+    <div id="modal-trainer-details" class="modal-backdrop hidden">
+      <div class="modal-card">
+        <div class="modal-header-banner" id="modal-banner" title="点击查看背景大图">
+          <button id="btn-close-modal" class="modal-close-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+          <div class="banner-overlay">
+            <div class="modal-title-row">
+              <div class="modal-thumb-box" id="modal-thumb-box" title="点击查看封面图">
+                <img id="modal-cover-img" src="" alt="Cover">
+              </div>
+              <div class="modal-meta-info">
+                <div class="modal-tags" id="modal-tags"></div>
+                <h1 id="modal-game-title">Game Title</h1>
+                <div class="modal-sub-meta">
+                  <span id="modal-version-tag" class="pill-tag pill-version">v1.0+</span>
+                  <span id="modal-options-count" class="pill-tag pill-options">28 Options</span>
+                  <span id="modal-date-tag" class="pill-tag pill-date">2026.08.25</span>
+                </div>
+              </div>
+              <div class="modal-quick-actions">
+                <button id="modal-btn-favorite" class="btn btn-secondary btn-icon-only" title="收藏">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                </button>
+                <button id="modal-btn-open-url" class="btn btn-secondary btn-icon-only" title="在浏览器打开详情页">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Tabs -->
+        <div class="modal-tabs-bar">
+          <div class="modal-tabs-left">
+            <button class="modal-tab active" data-tab="tab-options">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+              <span>修改功能与热键</span>
+            </button>
+            <button class="modal-tab" data-tab="tab-downloads" id="tab-btn-downloads">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <span>下载与历史版本</span>
+              <span id="modal-downloads-badge" class="badge-count">1</span>
+            </button>
+          </div>
+          <div class="modal-tabs-right">
+            <button id="btn-toggle-translate" class="btn btn-secondary btn-translate" title="切换中文翻译 / 英文原版">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+              <span id="translate-btn-text">🌐 中文翻译 ON</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Modal Body Content -->
+        <div class="modal-body-content">
+          <!-- Tab 1: Cheats & Hotkeys -->
+          <div id="tab-options" class="tab-pane active">
+            <!-- Special Notes Box -->
+            <div id="modal-notes-box" class="notes-callout hidden"></div>
+            <div id="modal-options-list" class="options-list">
+              <!-- Dynamically generated hotkeys -->
+            </div>
+          </div>
+
+          <!-- Tab 2: Downloads Attachments -->
+          <div id="tab-downloads" class="tab-pane">
+            <div id="modal-downloads-list" class="attachments-list">
+              <!-- Dynamically generated attachments -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Image Preview Lightbox -->
+    <div id="modal-image-preview" class="modal-backdrop image-lightbox-backdrop hidden">
+      <button id="btn-close-lightbox" class="lightbox-close-btn" title="关闭大图预览 (Esc)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+      <div class="lightbox-content">
+        <img id="lightbox-img" class="lightbox-img" src="" alt="Full Preview">
+        <div class="lightbox-caption" id="lightbox-caption"></div>
+      </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-container"></div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/settings.js"></script>
+  <script src="js/explore.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/downloads.js"></script>
+  <script src="js/library.js"></script>
+  <script src="js/details.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

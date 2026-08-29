@@ -1,0 +1,28 @@
+{
+  "name": "fling-box",
+  "productName": "FLiNG Box",
+  "version": "1.0.0",
+  "description": "FLiNG Box - 现代化风灵月影修改器盒子",
+  "main": "main/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --enable-logging",
+    "build": "electron-builder"
+  },
+  "keywords": [
+    "fling-trainer",
+    "game-trainer",
+    "electron",
+    "desktop-app"
+  ],
+  "author": "FLTrainerDesktop",
+  "license": "MIT",
+  "dependencies": {
+    "adm-zip": "^0.5.16",
+    "axios": "^1.7.9",
+    "cheerio": "^1.0.0"
+  },
+  "devDependencies": {
+    "electron": "^33.2.1"
+  }
+}
