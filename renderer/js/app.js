@@ -1,3 +1,20 @@
+// Image Cache Protocol URL Formatter
+window.formatImgUrl = function(url) {
+  if (!url || typeof url !== 'string') return '';
+  const trimmed = url.trim();
+  if (!trimmed) return '';
+  if (trimmed.startsWith('data:') || trimmed.startsWith('file:') || trimmed.startsWith('fl-img:') || trimmed.startsWith('../') || trimmed.startsWith('./') || trimmed.startsWith('/')) {
+    return trimmed;
+  }
+  if (trimmed.startsWith('//')) {
+    return `fl-img://load?url=${encodeURIComponent('https:' + trimmed)}`;
+  }
+  if (/^https?:\/\//i.test(trimmed)) {
+    return `fl-img://load?url=${encodeURIComponent(trimmed)}`;
+  }
+  return trimmed;
+};
+
 // Global Toast Helper
 function showToast(message, type = 'info') {
   const container = document.getElementById('toast-container');

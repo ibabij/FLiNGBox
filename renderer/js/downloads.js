@@ -137,11 +137,13 @@ const downloadsModule = (() => {
         statusClass = 'failed';
       }
 
-      const thumb200 = getThumb200Url(item.thumbCover || item.cover);
+      const rawThumb = getThumb200Url(item.thumbCover || item.cover);
+      const thumb200 = window.formatImgUrl ? window.formatImgUrl(rawThumb) : rawThumb;
+      const fallbackUrl = window.formatImgUrl ? window.formatImgUrl(item.cover || fallbackCover) : (item.cover || fallbackCover);
 
       card.innerHTML = `
         <div class="download-thumb-box">
-          <img class="download-thumb-img" src="${thumb200}" alt="${item.gameTitle || ''}" onerror="this.src='${item.cover || fallbackCover}'">
+          <img class="download-thumb-img" src="${thumb200}" alt="${item.gameTitle || ''}" onerror="this.src='${fallbackUrl}'">
         </div>
         <div class="download-details">
           <div class="download-title-row">

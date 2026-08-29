@@ -75,6 +75,11 @@ const exploreModule = (() => {
         const card = createTrainerCard(item);
         container.appendChild(card);
       });
+
+      if (window.electronAPI?.imageCache?.preload && result.items) {
+        const covers = result.items.map(x => x.cover).filter(Boolean);
+        window.electronAPI.imageCache.preload(covers);
+      }
     } catch (e) {
       container.innerHTML = `<div class="error-hint" style="grid-column: 1/-1; text-align: center; color: var(--color-danger); padding: 40px;">加载失败: ${e.message}<br><button class="btn btn-secondary" style="margin-top: 12px;" onclick="window.exploreModule.loadRecent(${page})">点击重试</button></div>`;
       showToast(e.message, 'error');
@@ -105,8 +110,9 @@ const exploreModule = (() => {
       </div>
     `;
 
-    const imgTagHtml = item.cover ? `
-      <img src="${item.cover}" alt="${item.title}" loading="lazy" onerror="this.style.display='none'; this.parentElement.classList.add('no-cover');">
+    const imgUrl = window.formatImgUrl ? window.formatImgUrl(item.cover) : item.cover;
+    const imgTagHtml = imgUrl ? `
+      <img src="${imgUrl}" alt="${item.title}" loading="lazy" onerror="this.style.display='none'; this.parentElement.classList.add('no-cover');">
     ` : '';
 
     const thumbWrapHtml = `

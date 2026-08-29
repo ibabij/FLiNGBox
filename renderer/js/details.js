@@ -464,7 +464,7 @@ const detailsModule = (() => {
     const captionEl = document.getElementById('lightbox-caption');
     if (!lightbox || !imgEl) return;
 
-    imgEl.src = imgUrl;
+    imgEl.src = window.formatImgUrl ? window.formatImgUrl(imgUrl) : imgUrl;
     if (captionEl) captionEl.textContent = captionText;
     lightbox.classList.remove('hidden');
   }
@@ -514,9 +514,10 @@ const detailsModule = (() => {
     const downloadsBadgeEl = document.getElementById('modal-downloads-badge');
 
     const fallbackCover = 'https://flingtrainer.com/wp-content/uploads/2019/05/cropped-free-icon-bw_icon-template-psd-3-3-200x200.png';
+    const initialCover = previewItem.cover || fallbackCover;
 
     titleEl.textContent = previewItem.title || '加载中...';
-    coverEl.src = previewItem.cover || fallbackCover;
+    coverEl.src = window.formatImgUrl ? window.formatImgUrl(initialCover) : initialCover;
     versionEl.textContent = previewItem.gameVersion || '获取中...';
     optionsCountEl.textContent = previewItem.optionsCount || '修改器';
     dateEl.textContent = previewItem.date || '';
@@ -554,9 +555,12 @@ const detailsModule = (() => {
       } else {
         titleEl.textContent = rawTitle;
       }
-      if (details.cover) coverEl.src = details.cover;
+      if (details.cover) {
+        coverEl.src = window.formatImgUrl ? window.formatImgUrl(details.cover) : details.cover;
+      }
       if (details.banner) {
-        bannerEl.style.backgroundImage = `url('${details.banner}')`;
+        const bannerUrl = window.formatImgUrl ? window.formatImgUrl(details.banner) : details.banner;
+        bannerEl.style.backgroundImage = `url('${bannerUrl}')`;
       }
       versionEl.textContent = details.gameVersion || '全版本';
       optionsCountEl.textContent = details.optionsCount || `${details.options.length} 项修改`;

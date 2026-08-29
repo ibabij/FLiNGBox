@@ -7,6 +7,7 @@ const settingsModule = (() => {
     const btnTestProxy = document.getElementById('btn-test-proxy');
     const proxyModeSelect = document.getElementById('setting-proxy-mode');
     const groupCustomProxy = document.getElementById('group-custom-proxy');
+    const btnClearCache = document.getElementById('btn-clear-image-cache');
 
     if (btnSelectDir) {
       btnSelectDir.addEventListener('click', async () => {
@@ -48,6 +49,25 @@ const settingsModule = (() => {
         } finally {
           btnTestProxy.disabled = false;
           btnTestProxy.textContent = '测试连通性';
+        }
+      });
+    }
+
+    if (btnClearCache) {
+      btnClearCache.addEventListener('click', async () => {
+        btnClearCache.disabled = true;
+        try {
+          const res = await window.electronAPI.imageCache.clear();
+          if (res && res.success) {
+            showToast(`成功清除 ${res.count} 张缓存图片 (释放 ${res.freedFormatted || '0 B'})`, 'success');
+          } else {
+            showToast('缓存清理完成', 'info');
+          }
+          await updateCacheStats();
+        } catch (e) {
+          showToast(`清理缓存失败: ${e.message}`, 'error');
+        } finally {
+          btnClearCache.disabled = false;
         }
       });
     }
@@ -100,6 +120,17 @@ const settingsModule = (() => {
     loadSettings();
   }
 
+  async function updateCacheStats() {
+    const statsEl = document.getElementById('cache-stats-text');
+    if (!statsEl) return;
+    try {
+      const stats = await window.electronAPI.imageCache.getStats();
+      statsEl.textContent = `${stats.count || 0} 张图片 (${stats.sizeFormatted || '0 B'})`;
+    } catch {
+      statsEl.textContent = '暂无统计';
+    }
+  }
+
   async function loadSettings() {
     currentConfig = await window.electronAPI.settings.get();
 
@@ -127,11 +158,14 @@ const settingsModule = (() => {
     if (groupCustomProxy) {
       groupCustomProxy.style.display = currentConfig.proxy?.mode === 'custom' ? 'flex' : 'none';
     }
+
+    await updateCacheStats();
   }
 
   return {
     init,
-    loadSettings
+    loadSettings,
+    updateCacheStats
   };
 })();
 

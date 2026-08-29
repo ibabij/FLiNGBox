@@ -15,6 +15,7 @@ class SimpleStore {
     if (!fs.existsSync(userDataPath)) {
       fs.mkdirSync(userDataPath, { recursive: true });
     }
+    this.userDataPath = userDataPath;
     this.configPath = path.join(userDataPath, 'config.json');
     this.libraryPath = path.join(userDataPath, 'library.json');
     this.downloadsPath = path.join(userDataPath, 'downloads.json');

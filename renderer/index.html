@@ -340,6 +340,21 @@
                 </label>
               </div>
 
+              <div class="form-group" style="margin-top: 18px; border-top: 1px solid var(--border-color); padding-top: 18px;">
+                <label>封面与背景原画本地缓存</label>
+                <div class="input-action-group" style="margin-top: 6px;">
+                  <div style="display: flex; align-items: center; gap: 8px; flex: 1; background: var(--bg-tertiary); padding: 8px 12px; border-radius: var(--radius-md); border: 1px solid var(--border-color); font-size: 13px;">
+                    <span style="color: var(--text-secondary);">已缓存图片：</span>
+                    <span id="cache-stats-text" style="color: var(--accent-cyan); font-weight: 600;">计算中...</span>
+                  </div>
+                  <button id="btn-clear-image-cache" class="btn btn-secondary" style="white-space: nowrap;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px; margin-right: 4px;"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    清除图片缓存
+                  </button>
+                </div>
+                <p class="field-hint">加载过的所有游戏封面与背景大图已保存至本地磁盘，离线或断网时可秒开预览。</p>
+              </div>
+
               <div class="about-box">
                 <div class="about-title">FLiNG Box v1.0.0</div>
                 <div class="about-text">

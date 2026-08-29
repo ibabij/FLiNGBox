@@ -80,8 +80,9 @@ const libraryModule = (() => {
         </div>
       `;
 
-      const imgTagHtml = item.cover ? `
-        <img src="${item.cover}" alt="${item.title}" loading="lazy" onerror="this.style.display='none'; this.parentElement.classList.add('no-cover');">
+      const imgUrl = window.formatImgUrl ? window.formatImgUrl(item.cover) : item.cover;
+      const imgTagHtml = imgUrl ? `
+        <img src="${imgUrl}" alt="${item.title}" loading="lazy" onerror="this.style.display='none'; this.parentElement.classList.add('no-cover');">
       ` : '';
 
       const thumbWrapHtml = `

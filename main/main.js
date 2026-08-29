@@ -1,15 +1,31 @@
-const { app, BrowserWindow, Tray, Menu, nativeImage } = require('electron');
+const { app, BrowserWindow, Tray, Menu, nativeImage, protocol } = require('electron');
 const path = require('path');
+const fs = require('fs');
 const SimpleStore = require('./store');
 const FlingScraper = require('./scraper');
 const Downloader = require('./downloader');
+const ImageCacheManager = require('./imageCache');
 const { setupIpcHandlers } = require('./ipcHandlers');
+
+protocol.registerSchemesAsPrivileged([
+  {
+    scheme: 'fl-img',
+    privileges: {
+      standard: true,
+      secure: true,
+      supportFetchAPI: true,
+      corsEnabled: true,
+      bypassCSP: true
+    }
+  }
+]);
 
 let mainWindow = null;
 let tray = null;
 let store = null;
 let scraper = null;
 let downloader = null;
+let imageCache = null;
 
 function createWindow() {
   const iconPath = path.join(__dirname, '../assets/icon.png');
@@ -82,11 +98,40 @@ function createTray() {
 
 app.whenReady().then(() => {
   store = new SimpleStore();
+  imageCache = new ImageCacheManager(store);
   scraper = new FlingScraper(store);
   downloader = new Downloader(store, null);
 
+  // Handle cached image requests via fl-img protocol
+  protocol.handle('fl-img', async (request) => {
+    try {
+      const urlObj = new URL(request.url);
+      const targetUrl = urlObj.searchParams.get('url');
+      if (!targetUrl) {
+        return new Response('Missing target url parameter', { status: 400 });
+      }
+
+      const result = await imageCache.getImage(targetUrl);
+      if (!result || !result.filePath || !fs.existsSync(result.filePath)) {
+        return new Response('Image not found', { status: 404 });
+      }
+
+      const buffer = fs.readFileSync(result.filePath);
+      return new Response(buffer, {
+        status: 200,
+        headers: {
+          'Content-Type': result.mimeType || 'image/jpeg',
+          'Cache-Control': 'public, max-age=31536000, immutable'
+        }
+      });
+    } catch (err) {
+      console.error('Failed to load image from fl-img protocol:', err.message);
+      return new Response('Image load error: ' + err.message, { status: 500 });
+    }
+  });
+
   createWindow();
-  setupIpcHandlers({ mainWindow, scraper, downloader, store });
+  setupIpcHandlers({ mainWindow, scraper, downloader, store, imageCache });
   createTray();
 
   app.on('activate', () => {

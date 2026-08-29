@@ -73,6 +73,13 @@ contextBridge.exposeInMainWorld('electronAPI', {
     selectFolder: () => ipcRenderer.invoke('dialog:select-folder')
   },
 
+  // Image Cache
+  imageCache: {
+    getStats: () => ipcRenderer.invoke('image-cache:get-stats'),
+    clear: () => ipcRenderer.invoke('image-cache:clear'),
+    preload: (urls) => ipcRenderer.invoke('image-cache:preload', urls)
+  },
+
   shell: {
     openExternal: (url) => ipcRenderer.invoke('shell:open-external', url)
   }

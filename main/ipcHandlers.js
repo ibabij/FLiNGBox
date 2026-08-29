@@ -1,6 +1,6 @@
 const { ipcMain, dialog, shell } = require('electron');
 
-function setupIpcHandlers({ mainWindow, scraper, downloader, store }) {
+function setupIpcHandlers({ mainWindow, scraper, downloader, store, imageCache }) {
   // Window controls
   ipcMain.handle('window:minimize', () => {
     if (mainWindow) mainWindow.minimize();
@@ -182,6 +182,22 @@ function setupIpcHandlers({ mainWindow, scraper, downloader, store }) {
       return result.filePaths[0];
     }
     return null;
+  });
+
+  // Image Cache endpoints
+  ipcMain.handle('image-cache:get-stats', () => {
+    return imageCache ? imageCache.getCacheStats() : { count: 0, sizeBytes: 0, sizeFormatted: '0 B' };
+  });
+
+  ipcMain.handle('image-cache:clear', () => {
+    return imageCache ? imageCache.clearCache() : { success: false, error: 'ImageCache not initialized' };
+  });
+
+  ipcMain.handle('image-cache:preload', async (_, urls) => {
+    if (imageCache && Array.isArray(urls)) {
+      imageCache.preloadImages(urls).catch(() => {});
+    }
+    return { success: true };
   });
 
   // External link
