@@ -35,11 +35,12 @@ jobs:
         shell: pwsh
         run: |
           $exes = Get-ChildItem dist/*.exe
-          if ($exes.Count -gt 1) {
-            Write-Host "Found $($exes.Count) exes, keeping only the first: $($exes[0].Name)"
-            $exes | Select-Object -Skip 1 | Remove-Item -Force
-          }
-          Rename-Item -Path $exes[0].FullName -NewName "FLiNG-Box-Portable.exe" -Force
+          Write-Host "dist exes: $($exes.Name -join ', ')"
+          $first = $exes | Select-Object -First 1
+          Move-Item -Path $first.FullName -Destination "$env:RUNNER_TEMP\FLiNG-Box-Portable.exe" -Force
+          Get-ChildItem dist/*.exe | Remove-Item -Force
+          Move-Item -Path "$env:RUNNER_TEMP\FLiNG-Box-Portable.exe" -Destination "dist/FLiNG-Box-Portable.exe" -Force
+          Write-Host "after cleanup: $((Get-ChildItem dist/*.exe).Name -join ', ')"
 
       - name: Release to GitHub
         uses: softprops/action-gh-release@v2
