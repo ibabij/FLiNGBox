@@ -41,7 +41,7 @@
       "assets/**/*",
       "package.json"
     ],
-    "artifactName": "${productName}-${version}.${ext}",
+    "artifactName": "FLiNG-Box-${version}.${ext}",
     "win": {
       "icon": "assets/icon.png",
       "target": [
