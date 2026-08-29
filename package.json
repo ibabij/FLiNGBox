@@ -7,7 +7,8 @@
   "scripts": {
     "start": "electron .",
     "dev": "electron . --enable-logging",
-    "build": "electron-builder"
+    "build": "electron-builder",
+    "build:win": "electron-builder --win"
   },
   "keywords": [
     "fling-trainer",
@@ -15,7 +16,7 @@
     "electron",
     "desktop-app"
   ],
-  "author": "FLTrainerDesktop",
+  "author": "JIBI",
   "license": "MIT",
   "dependencies": {
     "adm-zip": "^0.5.16",
@@ -23,6 +24,46 @@
     "cheerio": "^1.0.0"
   },
   "devDependencies": {
-    "electron": "^33.2.1"
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.jibi.flingbox",
+    "productName": "FLiNG Box",
+    "copyright": "Copyright © 2024-2026 JIBI",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main/**/*",
+      "preload/**/*",
+      "renderer/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "win": {
+      "icon": "assets/icon.png",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "FLiNG Box"
+    }
   }
 }
