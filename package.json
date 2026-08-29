@@ -41,15 +41,10 @@
       "assets/**/*",
       "package.json"
     ],
+    "artifactName": "${productName}-${version}.${ext}",
     "win": {
       "icon": "assets/icon.png",
       "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64"
-          ]
-        },
         {
           "target": "portable",
           "arch": [
@@ -57,13 +52,6 @@
           ]
         }
       ]
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true,
-      "shortcutName": "FLiNG Box"
     }
   }
 }
