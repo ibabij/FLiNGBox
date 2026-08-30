@@ -4,10 +4,10 @@
   <p><b>风灵月影盒子</b> — 专为单机游戏玩家打造的现代化修改器管理工具</p>
 
   <p>
-    <a href="https://github.com/ibabij/FLiNGBox/releases/latest"><img src="https://img.shields.io/github/v/release/ibabij/FLiNGBox?style=flat-square&color=00c58e&label=最新版本" alt="Latest Release" /></a>
-    <img src="https://img.shields.io/badge/平台-Windows%2010%2B-blue?style=flat-square" alt="Platform Windows" />
-    <img src="https://img.shields.io/badge/类型-绿色免安装-orange?style=flat-square" alt="Portable" />
-    <a href="LICENSE"><img src="https://img.shields.io/badge/协议-MIT-green?style=flat-square" alt="License" /></a>
+    <a href="https://github.com/ibabij/FLiNGBox/releases/latest"><img src="https://img.shields.io/github/v/release/ibabij/FLiNGBox?label=Release&style=flat-square&color=00c58e" alt="Latest Release" /></a>
+    <img src="https://img.shields.io/badge/Platform-Windows%2010%2B-blue?style=flat-square" alt="Platform Windows" />
+    <img src="https://img.shields.io/badge/Type-Portable-orange?style=flat-square" alt="Portable" />
+    <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License" /></a>
   </p>
 </div>
 
