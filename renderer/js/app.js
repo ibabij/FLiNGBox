@@ -111,14 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Official site link
-  const btnOfficial = document.getElementById('btn-open-official');
-  if (btnOfficial) {
-    btnOfficial.addEventListener('click', () => {
-      window.electronAPI.shell.openExternal('https://flingtrainer.com/');
-    });
-  }
-
   const aboutLink = document.getElementById('link-about-fling');
   if (aboutLink) {
     aboutLink.addEventListener('click', (e) => {
