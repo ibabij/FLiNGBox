@@ -9,12 +9,6 @@
     <img src="https://img.shields.io/badge/类型-绿色免安装-orange?style=flat-square" alt="Portable" />
     <a href="LICENSE"><img src="https://img.shields.io/badge/协议-MIT-green?style=flat-square" alt="License" /></a>
   </p>
-
-  <p>
-    <a href="https://github.com/ibabij/FLiNGBox/releases/latest">
-      <img src="https://img.shields.io/badge/⬇️_点此下载_Windows_单文件绿色版-238636?style=for-the-badge&logo=windows&logoColor=white" height="38" alt="Download Portable" />
-    </a>
-  </p>
 </div>
 
 ---
