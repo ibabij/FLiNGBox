@@ -166,8 +166,10 @@ class Downloader {
       }
       
       // Ensure proper extension
-      if (!path.extname(realFilename)) {
-        realFilename += '.exe';
+      const validExts = ['.exe', '.zip', '.rar', '.7z'];
+      const currentExt = path.extname(realFilename).toLowerCase();
+      if (!validExts.includes(currentExt)) {
+        realFilename = realFilename.replace(/\.(fling|tmp|com)$/i, '') + '.exe';
       }
 
       let actualFilePath = path.join(downloadDir, realFilename);
@@ -249,10 +251,11 @@ class Downloader {
           const isZip = magic[0] === 0x50 && magic[1] === 0x4B; // 'PK'
 
           if (isExe) {
-            // Direct standalone executable
-            if (actualFilePath.toLowerCase().endsWith('.zip')) {
-              const properExePath = actualFilePath.replace(/\.zip$/i, '.exe');
-              if (fs.existsSync(properExePath)) {
+            // Direct standalone executable: ensure it ends in .exe
+            if (!actualFilePath.toLowerCase().endsWith('.exe')) {
+              let properExePath = actualFilePath.replace(/\.(zip|fling|tmp|rar|7z)$/i, '') + '.exe';
+              if (!properExePath.toLowerCase().endsWith('.exe')) properExePath = actualFilePath + '.exe';
+              if (fs.existsSync(properExePath) && properExePath !== actualFilePath) {
                 try { fs.unlinkSync(properExePath); } catch (e) {}
               }
               fs.renameSync(actualFilePath, properExePath);
@@ -262,7 +265,19 @@ class Downloader {
             }
             extractedExePath = actualFilePath;
             extractedFolderPath = path.dirname(actualFilePath);
-          } else if (isZip || actualFilePath.toLowerCase().endsWith('.zip')) {
+          } else if (isZip) {
+            // Real zip file -> ensure it ends in .zip
+            if (!actualFilePath.toLowerCase().endsWith('.zip')) {
+              let properZipPath = actualFilePath.replace(/\.(exe|fling|tmp|rar|7z)$/i, '') + '.zip';
+              if (!properZipPath.toLowerCase().endsWith('.zip')) properZipPath = actualFilePath + '.zip';
+              if (fs.existsSync(properZipPath) && properZipPath !== actualFilePath) {
+                try { fs.unlinkSync(properZipPath); } catch (e) {}
+              }
+              fs.renameSync(actualFilePath, properZipPath);
+              actualFilePath = properZipPath;
+              record.filename = path.basename(properZipPath);
+              record.targetFilePath = properZipPath;
+            }
             // Real zip file -> extract
             if (config.autoExtract) {
               const extractResult = await this.extractZipFile(actualFilePath, gameTitle);
@@ -457,7 +472,7 @@ class Downloader {
       throw new Error(`修改器执行文件不存在: ${path.basename(exePath)}`);
     }
 
-    // Auto-fix: if file has no extension but is a PE executable (MZ header), rename to .exe
+    // Auto-fix: if file is not .exe or has .fling/.zip extension but is a PE executable (MZ header), rename to .exe
     if (fs.statSync(targetPath).isFile() && !targetPath.toLowerCase().endsWith('.exe')) {
       try {
         const fd = fs.openSync(targetPath, 'r');
@@ -465,7 +480,8 @@ class Downloader {
         fs.readSync(fd, magic, 0, 2, 0);
         fs.closeSync(fd);
         if (magic[0] === 0x4D && magic[1] === 0x5A) {
-          const properPath = targetPath + '.exe';
+          let properPath = targetPath.replace(/\.(fling|zip|tmp|rar|7z)$/i, '') + '.exe';
+          if (!properPath.toLowerCase().endsWith('.exe')) properPath = targetPath + '.exe';
           if (!fs.existsSync(properPath)) {
             fs.renameSync(targetPath, properPath);
             targetPath = properPath;
