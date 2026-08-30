@@ -1,7 +1,7 @@
 {
   "name": "fling-box",
   "productName": "FLiNG Box",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "FLiNG Box - 现代化风灵月影修改器盒子",
   "main": "main/main.js",
   "scripts": {
@@ -47,7 +47,7 @@
       "!**/node_modules/*.d.ts",
       "!**/node_modules/.bin"
     ],
-    "artifactName": "FLiNG-Box-Portable.${ext}",
+    "artifactName": "FLiNG-Box-v${version}-Portable.${ext}",
     "win": {
       "icon": "assets/icon.png",
       "target": [
