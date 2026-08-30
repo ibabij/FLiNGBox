@@ -36,11 +36,11 @@
 ## 📸 界面预览
 
 <div align="center">
-  <p><b>🎮 修改器探索与列表</b></p>
-  <img src="assets/screenshots/screenshot-01.png" width="90%" alt="修改器探索与列表" style="border-radius: 8px; box-shadow: 0 8px 30px rgba(0,0,0,0.3);" />
+  <p><b>🎮 探索与列表</b></p>
+  <img src="assets/screenshots/screenshot-01.png" width="90%" alt="探索与列表" style="border-radius: 8px; box-shadow: 0 8px 30px rgba(0,0,0,0.3);" />
   <br/><br/>
-  <p><b>📖 修改器功能与热键详情</b></p>
-  <img src="assets/screenshots/screenshot-02.png" width="90%" alt="修改器功能与热键详情" style="border-radius: 8px; box-shadow: 0 8px 30px rgba(0,0,0,0.3);" />
+  <p><b>📖 本地下载库</b></p>
+  <img src="assets/screenshots/screenshot-02.png" width="90%" alt="本地下载库" style="border-radius: 8px; box-shadow: 0 8px 30px rgba(0,0,0,0.3);" />
 </div>
 
 ---
