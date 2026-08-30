@@ -2,7 +2,29 @@
   <img src="assets/icon.png" width="130" height="130" alt="FLiNG Box Logo" style="border-radius: 50%; box-shadow: 0 8px 24px rgba(0,0,0,0.35);" />
   <h1>FLiNG Box</h1>
   <p><b>风灵月影盒子</b> — 专为单机游戏玩家打造的现代化修改器管理工具</p>
+
+  <p>
+    <a href="https://github.com/ibabij/FLiNGBox/releases/latest"><img src="https://img.shields.io/github/v/release/ibabij/FLiNGBox?style=flat-square&color=00c58e&label=最新版本" alt="Latest Release" /></a>
+    <img src="https://img.shields.io/badge/平台-Windows%2010%2B-blue?style=flat-square" alt="Platform Windows" />
+    <img src="https://img.shields.io/badge/类型-绿色免安装-orange?style=flat-square" alt="Portable" />
+    <a href="LICENSE"><img src="https://img.shields.io/badge/协议-MIT-green?style=flat-square" alt="License" /></a>
+  </p>
+
+  <p>
+    <a href="https://github.com/ibabij/FLiNGBox/releases/latest">
+      <img src="https://img.shields.io/badge/⬇️_点此下载_Windows_单文件绿色版-238636?style=for-the-badge&logo=windows&logoColor=white" height="38" alt="Download Portable" />
+    </a>
+  </p>
 </div>
+
+---
+
+## 📥 客户端下载（推荐）
+
+无需配置任何环境，直接下载打包好的单文件绿色便携版：
+
+1. 前往 **[👉 GitHub Releases 页面](https://github.com/ibabij/FLiNGBox/releases/latest)** 下载最新版本的 **`FLiNG-Box-v*.exe`**。
+2. 下载后直接双击运行，**免安装、无广告、纯净即用**。
 
 ---
 
@@ -13,10 +35,11 @@
 - 📖 **修改功能与详情预览**：完整展示热键列表、特别说明及游戏背景原画预览。
 - 🖼️ **图片本地持久化缓存**：自动缓存封面与背景原画到本地磁盘，弱网/离线秒开，支持在设置中一键清理。
 
-
 ---
 
-## 🚀 快速开始
+## 🛠️ 源码开发与运行
+
+如果你需要自行二次开发或从源码运行：
 
 ### 运行环境
 - Node.js >= 18
@@ -25,14 +48,17 @@
 ### 安装与运行
 
 ```bash
-# 1. 安装依赖
+# 1. 克隆仓库
+git clone https://github.com/ibabij/FLiNGBox.git
+
+# 2. 安装依赖
 npm install
 
-# 2. 启动客户端
+# 3. 启动开发模式
 npm start
 
-# 3. 打包生成安装包 (可选)
-npm run build
+# 4. 打包生成单文件绿色版 (.exe)
+npm run build:win
 ```
 
 ---
