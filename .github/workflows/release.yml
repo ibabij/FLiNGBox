@@ -27,20 +27,7 @@ jobs:
         run: npm ci || npm install
 
       - name: Build Electron App
-        run: npx electron-builder --win
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Keep only one portable executable
-        shell: pwsh
-        run: |
-          $exes = Get-ChildItem dist/*.exe
-          Write-Host "dist exes: $($exes.Name -join ', ')"
-          $first = $exes | Select-Object -First 1
-          Move-Item -Path $first.FullName -Destination "$env:RUNNER_TEMP\FLiNG-Box-Portable.exe" -Force
-          Get-ChildItem dist/*.exe | Remove-Item -Force
-          Move-Item -Path "$env:RUNNER_TEMP\FLiNG-Box-Portable.exe" -Destination "dist/FLiNG-Box-Portable.exe" -Force
-          Write-Host "after cleanup: $((Get-ChildItem dist/*.exe).Name -join ', ')"
+        run: npx electron-builder --win --publish never
 
       - name: Release to GitHub
         uses: softprops/action-gh-release@v2
