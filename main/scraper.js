@@ -968,10 +968,10 @@ class FlingScraper {
       $('.da-attachments-table tbody tr, .download-attachments table tbody tr').each((idx, tr) => {
         const $tr = $(tr);
         const linkEl = $tr.find('.attachment-title a, td:nth-child(1) a');
-        const rawName = linkEl.text().trim() || linkEl.attr('title') || 'Trainer.zip';
+        const rawName = linkEl.text().trim() || linkEl.attr('title') || 'Trainer.exe';
         let filename = rawName;
         if (!/\.(zip|exe|rar|7z)$/i.test(filename)) {
-          filename = filename + '.zip';
+          filename = filename + '.exe';
         }
         let downloadUrl = linkEl.attr('href') || '';
         

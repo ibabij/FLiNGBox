@@ -165,11 +165,9 @@ class Downloader {
         }
       }
       
-      // Ensure proper extension
-      const validExts = ['.exe', '.zip', '.rar', '.7z'];
-      const currentExt = path.extname(realFilename).toLowerCase();
-      if (!validExts.includes(currentExt)) {
-        realFilename = realFilename.replace(/\.(fling|tmp|com)$/i, '') + '.exe';
+      // Ensure proper extension without stripping any part of the original filename
+      if (!/\.(exe|zip|rar|7z)$/i.test(realFilename)) {
+        realFilename = realFilename + '.exe';
       }
 
       let actualFilePath = path.join(downloadDir, realFilename);
@@ -251,11 +249,15 @@ class Downloader {
           const isZip = magic[0] === 0x50 && magic[1] === 0x4B; // 'PK'
 
           if (isExe) {
-            // Direct standalone executable: ensure it ends in .exe
-            if (!actualFilePath.toLowerCase().endsWith('.exe')) {
-              let properExePath = actualFilePath.replace(/\.(zip|fling|tmp|rar|7z)$/i, '') + '.exe';
-              if (!properExePath.toLowerCase().endsWith('.exe')) properExePath = actualFilePath + '.exe';
-              if (fs.existsSync(properExePath) && properExePath !== actualFilePath) {
+            // Direct standalone executable: ensure it ends in .exe without stripping name parts
+            let properExePath = actualFilePath;
+            if (actualFilePath.toLowerCase().endsWith('.zip')) {
+              properExePath = actualFilePath.replace(/\.zip$/i, '.exe');
+            } else if (!actualFilePath.toLowerCase().endsWith('.exe')) {
+              properExePath = actualFilePath + '.exe';
+            }
+            if (properExePath !== actualFilePath) {
+              if (fs.existsSync(properExePath)) {
                 try { fs.unlinkSync(properExePath); } catch (e) {}
               }
               fs.renameSync(actualFilePath, properExePath);
@@ -266,11 +268,15 @@ class Downloader {
             extractedExePath = actualFilePath;
             extractedFolderPath = path.dirname(actualFilePath);
           } else if (isZip) {
-            // Real zip file -> ensure it ends in .zip
-            if (!actualFilePath.toLowerCase().endsWith('.zip')) {
-              let properZipPath = actualFilePath.replace(/\.(exe|fling|tmp|rar|7z)$/i, '') + '.zip';
-              if (!properZipPath.toLowerCase().endsWith('.zip')) properZipPath = actualFilePath + '.zip';
-              if (fs.existsSync(properZipPath) && properZipPath !== actualFilePath) {
+            // Real zip file -> ensure it ends in .zip without stripping name parts
+            let properZipPath = actualFilePath;
+            if (actualFilePath.toLowerCase().endsWith('.exe')) {
+              properZipPath = actualFilePath.replace(/\.exe$/i, '.zip');
+            } else if (!actualFilePath.toLowerCase().endsWith('.zip')) {
+              properZipPath = actualFilePath + '.zip';
+            }
+            if (properZipPath !== actualFilePath) {
+              if (fs.existsSync(properZipPath)) {
                 try { fs.unlinkSync(properZipPath); } catch (e) {}
               }
               fs.renameSync(actualFilePath, properZipPath);
@@ -472,7 +478,7 @@ class Downloader {
       throw new Error(`修改器执行文件不存在: ${path.basename(exePath)}`);
     }
 
-    // Auto-fix: if file is not .exe or has .fling/.zip extension but is a PE executable (MZ header), rename to .exe
+    // Auto-fix: if file is not .exe but is a PE executable (MZ header), preserve full name and append .exe
     if (fs.statSync(targetPath).isFile() && !targetPath.toLowerCase().endsWith('.exe')) {
       try {
         const fd = fs.openSync(targetPath, 'r');
@@ -480,8 +486,9 @@ class Downloader {
         fs.readSync(fd, magic, 0, 2, 0);
         fs.closeSync(fd);
         if (magic[0] === 0x4D && magic[1] === 0x5A) {
-          let properPath = targetPath.replace(/\.(fling|zip|tmp|rar|7z)$/i, '') + '.exe';
-          if (!properPath.toLowerCase().endsWith('.exe')) properPath = targetPath + '.exe';
+          const properPath = targetPath.toLowerCase().endsWith('.zip')
+            ? targetPath.replace(/\.zip$/i, '.exe')
+            : targetPath + '.exe';
           if (!fs.existsSync(properPath)) {
             fs.renameSync(targetPath, properPath);
             targetPath = properPath;
