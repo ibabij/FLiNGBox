@@ -1,7 +1,7 @@
 {
   "name": "fling-box",
   "productName": "FLiNG Box",
-  "version": "1.0.2",
+  "version": "1.0.0",
   "description": "FLiNG Box - 现代化风灵月影修改器盒子",
   "main": "main/main.js",
   "scripts": {
