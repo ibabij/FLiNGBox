@@ -17,7 +17,7 @@
     "tauri",
     "desktop-app"
   ],
-  "author": "JIBI",
+  "author": "FLiNG Box Developers",
   "license": "MIT",
   "dependencies": {
     "@tauri-apps/api": "^2.11.1",

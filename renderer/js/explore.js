@@ -1,6 +1,7 @@
 const exploreModule = (() => {
   let currentPage = 1;
   let totalPages = 1;
+  let pageSize = 15; // default 15 items per page (3x5 grid)
   let azData = null;
 
   function init() {
@@ -37,7 +38,7 @@ const exploreModule = (() => {
     loadRecent(1);
   }
 
-  function renderSkeletons(container, count = 8) {
+  function renderSkeletons(container, count = pageSize) {
     container.innerHTML = '';
     for (let i = 0; i < count; i++) {
       const sk = document.createElement('div');
@@ -53,13 +54,18 @@ const exploreModule = (() => {
     const btnNext = document.getElementById('btn-next-page');
 
     if (!container) return;
-    renderSkeletons(container, 8);
+    renderSkeletons(container, pageSize);
 
     try {
       cachedConfig = await window.electronAPI.settings.get();
       const result = await window.electronAPI.scraper.getRecent({ page });
       currentPage = result.currentPage || page;
       totalPages = result.totalPages || 1;
+
+      // Dynamically match items count returned from page (e.g. 15)
+      if (result.items && result.items.length > 0) {
+        pageSize = result.items.length;
+      }
 
       if (pageText) pageText.textContent = `第 ${currentPage} 页`;
       if (btnPrev) btnPrev.disabled = currentPage <= 1;

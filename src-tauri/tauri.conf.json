@@ -2,7 +2,7 @@
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "FLiNG Box",
   "version": "1.0.1",
-  "identifier": "com.jibi.flingbox",
+  "identifier": "com.flingbox.desktop",
   "build": {
     "frontendDist": "../renderer"
   },

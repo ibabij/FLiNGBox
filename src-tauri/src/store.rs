@@ -68,7 +68,7 @@ impl StoreManager {
     pub fn new() -> Self {
         let data_dir = dirs::data_dir()
             .unwrap_or_else(|| PathBuf::from("."))
-            .join("com.jibi.flingbox");
+            .join("FLiNGBox");
 
         let _ = fs::create_dir_all(&data_dir);
 

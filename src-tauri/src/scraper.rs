@@ -1025,34 +1025,41 @@ mod tests {
     fn test_parse_homepage_html() {
         let store = Arc::new(StoreManager::new());
         let scraper = FlingScraper::new(store);
-        let path = "C:\\Users\\JIBI\\.gemini\\antigravity-ide\\brain\\2df62199-c4bb-4086-86de-aba7f162e1f5\\scratch\\homepage.html";
-        if let Ok(content) = std::fs::read_to_string(path) {
-            let res = scraper.parse_trainer_list(&content, 1).expect("parse failed");
-            let items = res.get("items").unwrap().as_array().unwrap();
-            println!("Parsed {} items:", items.len());
-            for (idx, it) in items.iter().enumerate() {
-                let clean = it.get("cleanTitle").and_then(|v| v.as_str()).unwrap_or("");
-                let cn = it.get("cnTitle").and_then(|v| v.as_str()).unwrap_or("");
-                println!("  [{}] clean: {:55} | cn: {}", idx + 1, clean, cn);
-            }
-            assert!(!items.is_empty(), "Items should not be empty!");
-        }
+        let sample_html = r#"
+        <article class="post-standard post-43232">
+            <h2 class="post-title"><a href="https://flingtrainer.com/trainer/onimusha-way-of-the-sword-trainer/">Onimusha: Way of the Sword Trainer</a></h2>
+            <div class="post-details-thumb"><img src="https://flingtrainer.com/wp-content/uploads/2026/09/header-3-200x200.jpg" /></div>
+            <span class="post-details-year">2026</span>
+            <span class="post-details-month">09</span>
+            <span class="post-details-day">03</span>
+            <div class="entry">20 Options · Game Version: v1.0+ · Last Updated: 2026.09.03</div>
+        </article>
+        "#;
+        let res = scraper.parse_trainer_list(sample_html, 1).expect("parse failed");
+        let items = res.get("items").unwrap().as_array().unwrap();
+        assert_eq!(items.len(), 1);
+        assert_eq!(res.get("currentPage").unwrap(), 1);
+        let first = &items[0];
+        assert_eq!(first.get("cleanTitle").unwrap().as_str().unwrap(), "Onimusha: Way of the Sword");
+        assert_eq!(first.get("cnTitle").unwrap().as_str().unwrap(), "鬼武者：剑之道");
     }
 
     #[test]
     fn test_parse_detail_html() {
         let store = Arc::new(StoreManager::new());
         let scraper = FlingScraper::new(store);
-        let path = "C:\\Users\\JIBI\\.gemini\\antigravity-ide\\brain\\2df62199-c4bb-4086-86de-aba7f162e1f5\\scratch\\detail.html";
-        if let Ok(content) = std::fs::read_to_string(path) {
-            let (details, title_id) = scraper.parse_trainer_details_sync(&content, "https://flingtrainer.com/trainer/onimusha-way-of-the-sword-trainer/");
-            println!("Details parsed: {}", serde_json::to_string_pretty(&details).unwrap());
-            println!("Title ID: {:?}", title_id);
-            let options = details.get("options").unwrap().as_array().unwrap();
-            println!("Options count: {}", options.len());
-            let attachments = details.get("attachments").unwrap().as_array().unwrap();
-            println!("Attachments count: {}", attachments.len());
-        }
+        let sample_detail = r#"
+        <article class="post-standard">
+            <h1 class="entry-title">Onimusha: Way of the Sword Trainer</h1>
+            <div class="entry-content">
+                <p>Num 1 – God Mode/Ignore Hits</p>
+                <p>Num 2 – Infinite Health</p>
+            </div>
+        </article>
+        "#;
+        let (details, _) = scraper.parse_trainer_details_sync(sample_detail, "https://flingtrainer.com/trainer/onimusha-way-of-the-sword-trainer/");
+        assert_eq!(details.get("cleanTitle").unwrap().as_str().unwrap(), "Onimusha: Way of the Sword");
+        assert_eq!(details.get("cnTitle").unwrap().as_str().unwrap(), "鬼武者：剑之道");
     }
 
     #[test]

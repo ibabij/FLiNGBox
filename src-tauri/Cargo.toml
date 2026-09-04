@@ -2,7 +2,7 @@
 name = "fling_box"
 version = "1.0.1"
 description = "FLiNG Box - 现代化风灵月影修改器盒子"
-authors = ["JIBI"]
+authors = ["FLiNG Box Developers"]
 edition = "2021"
 rust-version = "1.77.2"
 

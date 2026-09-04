@@ -2,6 +2,7 @@ const searchModule = (() => {
   let currentQuery = '';
   let currentPage = 1;
   let totalPages = 1;
+  let searchPageSize = 15; // default 15 items
   const HISTORY_KEY = 'fl_search_history';
 
   function init() {
@@ -127,7 +128,7 @@ const searchModule = (() => {
     if (resultCount) resultCount.textContent = `正在搜索 "${query}" ...`;
     if (grid) {
       grid.innerHTML = '';
-      for (let i = 0; i < 4; i++) {
+      for (let i = 0; i < searchPageSize; i++) {
         const sk = document.createElement('div');
         sk.className = 'skeleton-card';
         grid.appendChild(sk);
@@ -138,6 +139,11 @@ const searchModule = (() => {
       const res = await window.electronAPI.scraper.search({ query, page });
       currentPage = res.currentPage || page;
       totalPages = res.totalPages || 1;
+
+      // Dynamically match items count returned from page
+      if (res.items && res.items.length > 0) {
+        searchPageSize = res.items.length;
+      }
 
       if (!res.items || res.items.length === 0) {
         if (res.isTranslated) {
