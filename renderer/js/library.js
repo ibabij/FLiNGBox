@@ -149,6 +149,22 @@ const libraryModule = (() => {
                   boxEl.appendChild(enDiv);
                 }
               }
+            } else if (window.electronAPI?.scraper?.translateText) {
+              window.electronAPI.scraper.translateText({ text: cleanEn, from: 'en', to: 'zh-CN' }).then(onlineCn => {
+                if (onlineCn && /[\u4e00-\u9fa5]/.test(onlineCn) && onlineCn.trim() !== cleanEn) {
+                  const cnEl = card.querySelector('.card-title-cn');
+                  const boxEl = card.querySelector('.card-title-box');
+                  if (cnEl && boxEl) {
+                    cnEl.textContent = onlineCn.trim();
+                    if (!card.querySelector('.card-title-en')) {
+                      const enDiv = document.createElement('div');
+                      enDiv.className = 'card-title-en';
+                      enDiv.textContent = cleanEn;
+                      boxEl.appendChild(enDiv);
+                    }
+                  }
+                }
+              }).catch(() => {});
             }
           }).catch(() => {});
         }

@@ -43,7 +43,7 @@ impl Default for AppConfig {
             download_dir: default_download.to_string_lossy().to_string(),
             auto_extract: true,
             delete_files_on_remove: true,
-            translate_game_titles: false,
+            translate_game_titles: true,
             proxy: ProxyConfig::default(),
             close_to_tray: false,
             theme: "dark".to_string(),
