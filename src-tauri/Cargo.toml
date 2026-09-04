@@ -1,6 +1,6 @@
 [package]
 name = "fling_box"
-version = "1.0.1"
+version = "1.0.2"
 description = "FLiNG Box - 现代化风灵月影修改器盒子"
 authors = ["FLiNG Box Developers"]
 edition = "2021"
