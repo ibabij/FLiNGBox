@@ -1,16 +1,21 @@
 // Image Cache Protocol URL Formatter
 window.formatImgUrl = function(url) {
   if (!url || typeof url !== 'string') return '';
-  const trimmed = url.trim();
+  let trimmed = url.trim();
   if (!trimmed) return '';
-  if (trimmed.startsWith('data:') || trimmed.startsWith('file:') || trimmed.startsWith('fl-img:') || trimmed.startsWith('../') || trimmed.startsWith('./') || trimmed.startsWith('/')) {
+  if (trimmed.startsWith('fl-img://')) {
+    try {
+      const match = trimmed.match(/url=([^&]+)/);
+      if (match) {
+        trimmed = decodeURIComponent(match[1]);
+      }
+    } catch (e) {}
+  }
+  if (trimmed.startsWith('data:') || trimmed.startsWith('file:') || trimmed.startsWith('../') || trimmed.startsWith('./') || trimmed.startsWith('/')) {
     return trimmed;
   }
   if (trimmed.startsWith('//')) {
-    return `fl-img://load?url=${encodeURIComponent('https:' + trimmed)}`;
-  }
-  if (/^https?:\/\//i.test(trimmed)) {
-    return `fl-img://load?url=${encodeURIComponent(trimmed)}`;
+    return 'https:' + trimmed;
   }
   return trimmed;
 };

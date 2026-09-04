@@ -27,28 +27,55 @@ const downloadsModule = (() => {
     window.electronAPI.download.onStart((record) => {
       handleDownloadUpdate(record);
       updateBadge();
+      startPollingIfNeeded();
     });
 
     window.electronAPI.download.onProgress((record) => {
       handleDownloadUpdate(record);
       updateBadge();
+      startPollingIfNeeded();
     });
 
     window.electronAPI.download.onCompleted((record) => {
       handleDownloadUpdate(record);
       updateBadge();
       showToast(`下载完成: ${record.filename}`, 'success');
-      // If library view is open or cached, update
       window.libraryModule?.loadLibrary();
+      loadDownloads();
     });
 
     window.electronAPI.download.onFailed((record) => {
       handleDownloadUpdate(record);
       updateBadge();
       showToast(`下载失败: ${record.filename} (${record.error || '网络错误'})`, 'error');
+      loadDownloads();
     });
 
     loadDownloads();
+  }
+
+  let pollTimer = null;
+  function startPollingIfNeeded() {
+    const hasActive = downloadsList.some(x => x.status === 'downloading');
+    if (hasActive && !pollTimer) {
+      pollTimer = setInterval(async () => {
+        try {
+          downloadsList = await window.electronAPI.download.getList();
+          renderDownloadsList();
+          updateBadge();
+          const stillActive = downloadsList.some(x => x.status === 'downloading');
+          if (!stillActive) {
+            clearInterval(pollTimer);
+            pollTimer = null;
+          }
+        } catch (e) {
+          // ignore
+        }
+      }, 1000);
+    } else if (!hasActive && pollTimer) {
+      clearInterval(pollTimer);
+      pollTimer = null;
+    }
   }
 
   function formatBytes(bytes, decimals = 1) {
@@ -77,6 +104,7 @@ const downloadsModule = (() => {
     downloadsList = await window.electronAPI.download.getList();
     renderDownloadsList();
     updateBadge();
+    startPollingIfNeeded();
   }
 
   function updateBadge() {
@@ -141,6 +169,30 @@ const downloadsModule = (() => {
       const thumb200 = window.formatImgUrl ? window.formatImgUrl(rawThumb) : rawThumb;
       const fallbackUrl = window.formatImgUrl ? window.formatImgUrl(item.cover || fallbackCover) : (item.cover || fallbackCover);
 
+      const hasTotal = item.totalBytes && item.totalBytes > 0;
+      const progressPercent = item.status === 'completed'
+        ? 100
+        : (item.percent || (hasTotal ? Math.min(99, Math.round((item.downloadedBytes / item.totalBytes) * 100)) : 0));
+
+      let progressText = '';
+      if (item.status === 'completed') {
+        progressText = `大小: ${formatBytes(item.totalBytes || item.downloadedBytes || 0)}`;
+      } else if (hasTotal) {
+        progressText = `进度: ${progressPercent}% (${formatBytes(item.downloadedBytes || 0)} / ${formatBytes(item.totalBytes)})`;
+      } else {
+        progressText = `已下载: ${formatBytes(item.downloadedBytes || 0)}`;
+      }
+
+      let fillStyle = `width: ${progressPercent}%`;
+      if (item.status === 'downloading' && !hasTotal) {
+        fillStyle = `width: 100%; opacity: 0.8;`;
+      }
+
+      const isExe = (item.filename || '').toLowerCase().endsWith('.exe') || (item.extractedExePath && item.extractedExePath.endsWith('.exe'));
+      const formatBadge = isExe
+        ? '<span style="font-size: 11px; padding: 1px 5px; border-radius: 4px; background: rgba(56, 189, 248, 0.15); color: #38bdf8; font-weight: 600; margin-left: 6px;">EXE</span>'
+        : '<span style="font-size: 11px; padding: 1px 5px; border-radius: 4px; background: rgba(251, 146, 60, 0.15); color: #fb923c; font-weight: 600; margin-left: 6px;">ZIP</span>';
+
       card.innerHTML = `
         <div class="download-thumb-box">
           <img class="download-thumb-img" src="${thumb200}" alt="${item.gameTitle || ''}" onerror="this.src='${fallbackUrl}'">
@@ -148,13 +200,14 @@ const downloadsModule = (() => {
         <div class="download-details">
           <div class="download-title-row">
             <span class="download-filename">${item.filename}</span>
+            ${formatBadge}
             <span class="download-status-badge ${statusClass}">${statusText}</span>
           </div>
           <div class="progress-bar-bg">
-            <div class="progress-bar-fill" style="width: ${item.percent || 0}%"></div>
+            <div class="progress-bar-fill" style="${fillStyle}"></div>
           </div>
           <div class="download-meta-row">
-            <span>进度: ${item.percent || 0}% (${formatBytes(item.downloadedBytes || 0)} / ${formatBytes(item.totalBytes || 0)})</span>
+            <span>${progressText}</span>
             ${item.status === 'downloading' ? `<span>速度: ${formatSpeed(item.speed)} | 剩余: ${formatETA(item.eta)}</span>` : ''}
             ${item.status === 'completed' ? `<span>所属游戏: ${item.gameTitle || '未知'}</span>` : ''}
             ${item.status === 'failed' ? `<span style="color: var(--color-danger);">❌ 失败原因: ${item.error || '网络连接超时'}</span>` : ''}
@@ -245,7 +298,8 @@ const downloadsModule = (() => {
       ...taskData
     };
     await window.electronAPI.download.start(task);
-    loadDownloads();
+    await loadDownloads();
+    startPollingIfNeeded();
   }
 
   return {

@@ -1,0 +1,32 @@
+[package]
+name = "fling_box"
+version = "1.0.0"
+description = "FLiNG Box - 现代化风灵月影修改器盒子"
+authors = ["JIBI"]
+edition = "2021"
+rust-version = "1.77.2"
+
+[lib]
+name = "fling_box_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2.6.3", features = [] }
+
+[dependencies]
+tauri = { version = "2.11.3", features = ["tray-icon"] }
+tauri-plugin-dialog = "2"
+tauri-plugin-opener = "2"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+reqwest = { version = "0.12", features = ["json", "stream", "cookies", "socks"] }
+scraper = "0.20"
+tokio = { version = "1", features = ["full"] }
+zip = { version = "2.1", default-features = false, features = ["deflate"] }
+dirs = "5"
+md5 = "0.7"
+url = "2"
+futures-util = "0.3"
+regex = "1"
+log = "0.4"
+urlencoding = "2.1"

@@ -3,62 +3,29 @@
   "productName": "FLiNG Box",
   "version": "1.0.0",
   "description": "FLiNG Box - 现代化风灵月影修改器盒子",
-  "main": "main/main.js",
   "scripts": {
-    "start": "electron .",
-    "dev": "electron . --enable-logging",
-    "build": "electron-builder",
-    "build:win": "electron-builder --win"
+    "start": "node scripts/run-tauri.js dev",
+    "dev": "node scripts/run-tauri.js dev",
+    "build": "node scripts/run-tauri.js build",
+    "tauri": "node scripts/run-tauri.js",
+    "tauri:dev": "node scripts/run-tauri.js dev",
+    "tauri:build": "node scripts/run-tauri.js build"
   },
   "keywords": [
     "fling-trainer",
     "game-trainer",
-    "electron",
+    "tauri",
     "desktop-app"
   ],
   "author": "JIBI",
   "license": "MIT",
   "dependencies": {
-    "adm-zip": "^0.5.16",
-    "axios": "^1.7.9",
-    "cheerio": "^1.0.0"
+    "@tauri-apps/api": "^2.11.1",
+    "@tauri-apps/plugin-dialog": "^2.7.3",
+    "@tauri-apps/plugin-fs": "^2.5.2",
+    "@tauri-apps/plugin-shell": "^2.3.6"
   },
   "devDependencies": {
-    "electron": "^33.2.1",
-    "electron-builder": "^25.1.8"
-  },
-  "build": {
-    "appId": "com.jibi.flingbox",
-    "productName": "FLiNG Box",
-    "copyright": "Copyright © 2024-2026 JIBI",
-    "compression": "maximum",
-    "asar": true,
-    "directories": {
-      "output": "dist"
-    },
-    "files": [
-      "main/**/*",
-      "preload/**/*",
-      "renderer/**/*",
-      "assets/**/*",
-      "!assets/screenshots/**/*",
-      "package.json",
-      "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
-      "!**/node_modules/*/{test,__tests__,tests,powertest,example,examples}",
-      "!**/node_modules/*.d.ts",
-      "!**/node_modules/.bin"
-    ],
-    "artifactName": "FLiNG-Box-v${version}-Portable.${ext}",
-    "win": {
-      "icon": "assets/icon.png",
-      "target": [
-        {
-          "target": "portable",
-          "arch": [
-            "x64"
-          ]
-        }
-      ]
-    }
+    "@tauri-apps/cli": "^2.11.4"
   }
 }

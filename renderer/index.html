@@ -11,11 +11,11 @@
 <body class="theme-dark">
   <div id="app" class="app-container">
     <!-- Custom Draggable Titlebar -->
-    <header class="titlebar">
-      <div class="titlebar-drag-region">
+    <header class="titlebar" data-tauri-drag-region>
+      <div class="titlebar-drag-region" data-tauri-drag-region>
         <div class="app-brand">
           <div class="brand-icon">
-            <img src="../assets/icon.png" alt="FLiNG Box Logo">
+            <img src="assets/icon.png" alt="FLiNG Box Logo">
           </div>
           <span class="brand-name">FLiNG <span class="brand-sub">Box</span></span>
           <span class="badge-tag">风灵盒子</span>
@@ -365,7 +365,7 @@
               </div>
               <div class="sponsor-content">
                 <div class="sponsor-qr-wrap">
-                  <img src="../assets/sponsor_qr.png" alt="微信赞赏码" class="sponsor-qr-img">
+                  <img src="assets/sponsor_qr.png" alt="微信赞赏码" class="sponsor-qr-img">
                   <div class="sponsor-qr-tag">
                     <svg viewBox="0 0 24 24" fill="currentColor" style="width: 14px; height: 14px; color: #07c160;"><path d="M8.5 2C4.36 2 1 4.91 1 8.5c0 2.05 1.09 3.88 2.8 5.06l-.7 2.11a.5.5 0 0 0 .63.63l2.45-.82c.73.23 1.51.36 2.32.36.21 0 .42-.01.62-.03-.2-.59-.32-1.22-.32-1.87 0-3.31 3.13-6 7-6 .48 0 .94.04 1.39.13C16.48 4.28 12.82 2 8.5 2zM15.5 9c-3.59 0-6.5 2.46-6.5 5.5 0 1.74.96 3.29 2.46 4.3l-.58 1.74a.5.5 0 0 0 .63.63l2.02-.67c.62.19 1.28.3 1.97.3 3.59 0 6.5-2.46 6.5-5.5S19.09 9 15.5 9z"/></svg>
                     <span>微信扫码打赏</span>
@@ -482,6 +482,7 @@
   </div>
 
   <!-- Scripts -->
+  <script src="js/tauri-adapter.js"></script>
   <script src="js/settings.js"></script>
   <script src="js/explore.js"></script>
   <script src="js/search.js"></script>

@@ -297,7 +297,8 @@ const exploreModule = (() => {
     init,
     loadRecent,
     loadAZ,
-    createTrainerCard
+    createTrainerCard,
+    getCurrentPage: () => currentPage
   };
 })();
 

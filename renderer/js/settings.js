@@ -73,34 +73,44 @@ const settingsModule = (() => {
     }
 
     async function saveCurrentSettings(showFeedback = true) {
-      const downloadDir = document.getElementById('setting-download-dir')?.value || '';
-      const autoExtract = document.getElementById('setting-auto-extract')?.checked ?? true;
-      const deleteFilesOnRemove = document.getElementById('setting-delete-files-on-remove')?.checked ?? true;
-      const translateGameTitles = document.getElementById('setting-translate-game-titles')?.checked ?? false;
-      const proxyMode = document.getElementById('setting-proxy-mode')?.value || 'direct';
-      const customUrl = document.getElementById('setting-custom-proxy')?.value || '';
-      const closeToTray = document.getElementById('setting-close-to-tray')?.checked ?? false;
+      try {
+        const downloadDir = document.getElementById('setting-download-dir')?.value || '';
+        const autoExtract = document.getElementById('setting-auto-extract')?.checked ?? true;
+        const deleteFilesOnRemove = document.getElementById('setting-delete-files-on-remove')?.checked ?? true;
+        const translateGameTitles = document.getElementById('setting-translate-game-titles')?.checked ?? false;
+        const proxyMode = document.getElementById('setting-proxy-mode')?.value || 'direct';
+        const customUrl = document.getElementById('setting-custom-proxy')?.value || '';
+        const closeToTray = document.getElementById('setting-close-to-tray')?.checked ?? false;
 
-      const newConfig = {
-        downloadDir,
-        autoExtract,
-        deleteFilesOnRemove,
-        translateGameTitles,
-        proxy: {
-          mode: proxyMode,
-          customUrl
-        },
-        closeToTray
-      };
+        const newConfig = {
+          downloadDir,
+          autoExtract,
+          deleteFilesOnRemove,
+          translateGameTitles,
+          proxy: {
+            mode: proxyMode,
+            customUrl
+          },
+          closeToTray,
+          theme: currentConfig.theme || 'dark'
+        };
 
-      await window.electronAPI.settings.save(newConfig);
-      currentConfig = newConfig;
-      if (showFeedback) {
-        showToast('设置已成功保存！', 'success');
+        const saved = await window.electronAPI.settings.save(newConfig);
+        currentConfig = saved || newConfig;
+        if (showFeedback) {
+          showToast('设置已成功保存！', 'success');
+        } else {
+          showToast(translateGameTitles ? '已开启游戏名称中文翻译' : '已关闭游戏名称翻译', 'info');
+        }
+
+        // Refresh explore & library cards immediately
+        const page = window.exploreModule?.getCurrentPage ? window.exploreModule.getCurrentPage() : 1;
+        window.exploreModule?.loadRecent(page);
+        window.libraryModule?.loadLibrary();
+      } catch (err) {
+        console.error('[Settings] Save settings failed:', err);
+        showToast(`保存设置失败: ${err.message || err}`, 'error');
       }
-      // Refresh cards if needed
-      window.exploreModule?.loadRecent();
-      window.libraryModule?.loadLibrary();
     }
 
     if (btnSave) {

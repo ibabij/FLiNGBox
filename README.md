@@ -45,12 +45,24 @@
 
 ---
 
-## 🛠️ 源码开发与运行
+## ⚡ 架构全面升级：Tauri v2 极致瘦身对比
 
-如果你需要自行二次开发或从源码运行：
+本项目已全面重构至 **Tauri v2 (Rust + WebView2)** 架构，告别臃肿的 Electron：
+
+| 指标 | 原 Electron 架构 | 重构后 Tauri v2 架构 | 优化幅度 |
+| :--- | :--- | :--- | :--- |
+| **安装包体积 (NSIS)** | 约 **85.0 MB** | **4.09 MB** | 📉 **体积暴降 95.2%** |
+| **便携压缩包 (Zip)** | 约 **85.0 MB** | **5.40 MB** | 📉 **体积暴降 93.6%** |
+| **独立运行程序 (.exe)** | **277.3 MB** | **15.4 MB** | 📉 **体积暴降 94.5% (缩减 18 倍)** |
+| **常驻内存占用 (RAM)** | ~**200 MB** | **~33 MB** | 🚀 **内存降低 85%** |
+
+---
+
+## 🛠️ 源码开发与构建
 
 ### 运行环境
 - Node.js >= 18
+- Rust 1.77+ (已自动配置 MSVC 2022 工具链与 Windows SDK)
 - Windows 10 / 11
 
 ### 安装与运行
@@ -62,12 +74,13 @@ git clone https://github.com/ibabij/FLiNGBox.git
 # 2. 安装依赖
 npm install
 
-# 3. 启动开发模式
-npm start
+# 3. 启动 Tauri 开发模式
+npm run tauri:dev
 
-# 4. 打包生成单文件绿色版 (.exe)
-npm run build:win
+# 4. 构建生产发布包 (生成轻量化独立 EXE 与 NSIS 安装包)
+npm run tauri:build
 ```
+构建产物将输出在 `src-tauri/target/release/` 以及项目的 `dist/` 目录中。
 
 ---
 

@@ -738,17 +738,34 @@ const detailsModule = (() => {
           </div>
         `;
 
-        row.querySelector('.btn-start-download').addEventListener('click', async () => {
+        row.querySelector('.btn-start-download').addEventListener('click', async (e) => {
+          const btn = e.currentTarget;
+          const origHtml = btn.innerHTML;
+          btn.disabled = true;
+          btn.innerHTML = `<span style="display:inline-flex;align-items:center;gap:6px;">⏳ 添加中...</span>`;
           showToast(`已开始下载自动更新版: ${att.filename}`, 'info');
-          window.downloadsModule?.startNewDownload({
-            downloadUrl: att.downloadUrl,
-            referer: att.referer || trainerDetails.url,
-            filename: att.filename,
-            gameTitle: trainerDetails.title,
-            cover: trainerDetails.cover,
-            thumbCover: trainerDetails.thumbCover || trainerDetails.cover,
-            version: 'Auto-Updating (Latest)'
-          });
+
+          try {
+            await window.downloadsModule?.startNewDownload({
+              downloadUrl: att.downloadUrl,
+              referer: att.referer || trainerDetails.url,
+              filename: att.filename,
+              fileSize: att.fileSize,
+              gameTitle: trainerDetails.title,
+              cover: trainerDetails.cover,
+              thumbCover: trainerDetails.thumbCover || trainerDetails.cover,
+              version: 'Auto-Updating (Latest)'
+            });
+            btn.innerHTML = `<span style="display:inline-flex;align-items:center;gap:6px;">✓ 已加入下载</span>`;
+            setTimeout(() => {
+              btn.disabled = false;
+              btn.innerHTML = origHtml;
+            }, 2500);
+          } catch (err) {
+            btn.disabled = false;
+            btn.innerHTML = origHtml;
+            showToast(`下载启动失败: ${err.message || err}`, 'error');
+          }
         });
 
         autoSection.appendChild(row);
@@ -820,17 +837,34 @@ const detailsModule = (() => {
           </div>
         `;
 
-        row.querySelector('.btn-start-download').addEventListener('click', async () => {
+        row.querySelector('.btn-start-download').addEventListener('click', async (e) => {
+          const btn = e.currentTarget;
+          const origHtml = btn.innerHTML;
+          btn.disabled = true;
+          btn.innerHTML = `<span style="display:inline-flex;align-items:center;gap:6px;">⏳ 添加中...</span>`;
           showToast(`已开始下载独立版: ${att.filename}`, 'info');
-          window.downloadsModule?.startNewDownload({
-            downloadUrl: att.downloadUrl,
-            referer: att.referer || trainerDetails.url,
-            filename: att.filename,
-            gameTitle: trainerDetails.title,
-            cover: trainerDetails.cover,
-            thumbCover: trainerDetails.thumbCover || trainerDetails.cover,
-            version: att.versionLabel || trainerDetails.gameVersion
-          });
+
+          try {
+            await window.downloadsModule?.startNewDownload({
+              downloadUrl: att.downloadUrl,
+              referer: att.referer || trainerDetails.url,
+              filename: att.filename,
+              fileSize: att.fileSize,
+              gameTitle: trainerDetails.title,
+              cover: trainerDetails.cover,
+              thumbCover: trainerDetails.thumbCover || trainerDetails.cover,
+              version: att.versionLabel || trainerDetails.gameVersion
+            });
+            btn.innerHTML = `<span style="display:inline-flex;align-items:center;gap:6px;">✓ 已加入下载</span>`;
+            setTimeout(() => {
+              btn.disabled = false;
+              btn.innerHTML = origHtml;
+            }, 2500);
+          } catch (err) {
+            btn.disabled = false;
+            btn.innerHTML = origHtml;
+            showToast(`下载启动失败: ${err.message || err}`, 'error');
+          }
         });
 
         standSection.appendChild(row);
