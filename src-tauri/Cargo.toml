@@ -30,3 +30,11 @@ futures-util = "0.3"
 regex = "1"
 log = "0.4"
 urlencoding = "2.1"
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
+

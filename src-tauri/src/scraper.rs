@@ -9,184 +9,34 @@ const USER_AGENT: &str = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/
 
 pub struct FlingScraper {
     store: Arc<StoreManager>,
-    en_to_cn: HashMap<&'static str, &'static str>,
-    cn_to_en: HashMap<&'static str, &'static str>,
+    en_to_cn: HashMap<String, String>,
+    cn_to_en: HashMap<String, String>,
 }
 
 impl FlingScraper {
     pub fn new(store: Arc<StoreManager>) -> Self {
         let mut en_to_cn = HashMap::new();
-        en_to_cn.insert("monster hunter wilds", "怪物猎人：荒野");
-        en_to_cn.insert("monster hunter world", "怪物猎人：世界");
-        en_to_cn.insert("monster hunter rise", "怪物猎人：崛起");
-        en_to_cn.insert("black myth wukong", "黑神话：悟空");
-        en_to_cn.insert("black myth: wukong", "黑神话：悟空");
-        en_to_cn.insert("cyberpunk 2077", "赛博朋克 2077");
-        en_to_cn.insert("elden ring", "艾尔登法环");
-        en_to_cn.insert("shadow of the erdtree", "黄金树幽影");
-        en_to_cn.insert("palworld", "幻兽帕鲁");
-        en_to_cn.insert("red dead redemption 2", "荒野大镖客：救赎 2");
-        en_to_cn.insert("resident evil 4", "生化危机 4");
-        en_to_cn.insert("resident evil 2", "生化危机 2");
-        en_to_cn.insert("resident evil 3", "生化危机 3");
-        en_to_cn.insert("resident evil 7", "生化危机 7");
-        en_to_cn.insert("resident evil village", "生化危机：村庄");
-        en_to_cn.insert("the witcher 3", "巫师 3：狂猎");
-        en_to_cn.insert("sekiro", "只狼：影逝二度");
-        en_to_cn.insert("sekiro shadows die twice", "只狼：影逝二度");
-        en_to_cn.insert("god of war", "战神");
-        en_to_cn.insert("god of war ragnarok", "战神：诸神黄昏");
-        en_to_cn.insert("assassins creed", "刺客信条");
-        en_to_cn.insert("assassins creed shadows", "刺客信条：影");
-        en_to_cn.insert("assassins creed mirage", "刺客信条：幻景");
-        en_to_cn.insert("assassins creed valhalla", "刺客信条：英灵殿");
-        en_to_cn.insert("baldurs gate 3", "博德之门 3");
-        en_to_cn.insert("diablo iv", "暗黑破坏神 4");
-        en_to_cn.insert("stalker 2", "潜行者 2：切尔诺贝利之心");
-        en_to_cn.insert("s.t.a.l.k.e.r. 2", "潜行者 2：切尔诺贝利之心");
-        en_to_cn.insert("it takes two", "双人成行");
-        en_to_cn.insert("hogwarts legacy", "霍格沃茨之遗");
-        en_to_cn.insert("kingdom come deliverance ii", "天国：拯救 2");
-        en_to_cn.insert("kingdom come deliverance", "天国：拯救");
-        en_to_cn.insert("helldivers 2", "绝地潜兵 2");
-        en_to_cn.insert("hades ii", "哈迪斯 2");
-        en_to_cn.insert("hades", "哈迪斯");
-        en_to_cn.insert("dead space", "死亡空间");
-        en_to_cn.insert("ghost of tsushima", "对马岛之魂");
-        en_to_cn.insert("wo long", "卧龙：苍天陨落");
-        en_to_cn.insert("nioh 2", "仁王 2");
-        en_to_cn.insert("nioh", "仁王");
-        en_to_cn.insert("starfield", "星空");
-        en_to_cn.insert("dave the diver", "潜水员戴夫");
-        en_to_cn.insert("stardew valley", "星露谷物语");
-        en_to_cn.insert("terraria", "泰拉瑞亚");
-        en_to_cn.insert("final fantasy vii", "最终幻想 7");
-        en_to_cn.insert("final fantasy xvi", "最终幻想 16");
-        en_to_cn.insert("armored core vi", "装甲核心 6");
-        en_to_cn.insert("like a dragon", "人中之龙 / 如龙");
-        en_to_cn.insert("octopath traveler", "八方旅人 / 歧路旅人");
-        en_to_cn.insert("borderlands 3", "无主之地 3");
-        en_to_cn.insert("doom eternal", "毁灭战士：永恒");
-        en_to_cn.insert("devil may cry 5", "鬼泣 5");
-        en_to_cn.insert("nier automata", "尼尔：机械纪元");
-        en_to_cn.insert("escape from tarkov", "逃离塔科夫");
-        en_to_cn.insert("cities skylines ii", "城市：天际线 2");
-        en_to_cn.insert("civilization vi", "文明 6");
-        en_to_cn.insert("civilization vii", "文明 7");
-        en_to_cn.insert("stellaris", "群星");
-        en_to_cn.insert("hearts of iron iv", "钢铁雄心 4");
-        en_to_cn.insert("crusader kings iii", "十字军之王 3");
-        en_to_cn.insert("hollow knight", "空洞骑士");
-        en_to_cn.insert("slay the spire", "杀戮尖塔");
-        en_to_cn.insert("dead cells", "死亡细胞");
-        en_to_cn.insert("lies of p", "匹诺曹的谎言");
-        en_to_cn.insert("silent hill 2", "寂静岭 2");
-        en_to_cn.insert("horizon zero dawn", "地平线：零之曙光");
-        en_to_cn.insert("horizon forbidden west", "地平线：西之绝境");
-        en_to_cn.insert("dying light 2", "消逝的光芒 2");
-        en_to_cn.insert("dragons dogma 2", "龙之信条 2");
-        en_to_cn.insert("stellar blade", "剑星");
-        en_to_cn.insert("sons of the forest", "森林之子");
-        en_to_cn.insert("satisfactory", "幸福工厂");
-        en_to_cn.insert("frostpunk 2", "冰汽时代 2");
-        en_to_cn.insert("death stranding", "死亡搁浅");
-        en_to_cn.insert("onimusha way of the sword", "鬼武者：剑之道");
-        en_to_cn.insert("the blood of dawnwalker", "黎明行者之血");
-        en_to_cn.insert("heros adventure", "大侠立志传");
-        en_to_cn.insert("hero's adventure", "大侠立志传");
-        en_to_cn.insert("manor lords", "庄园领主");
-        en_to_cn.insert("metal gear solid", "合金装备");
-        en_to_cn.insert("aliens fireteam elite 2", "异形：火力小队 2");
-
         let mut cn_to_en = HashMap::new();
-        cn_to_en.insert("怪物猎人", "Monster Hunter");
-        cn_to_en.insert("怪物猎人荒野", "Monster Hunter Wilds");
-        cn_to_en.insert("怪猎荒野", "Monster Hunter Wilds");
-        cn_to_en.insert("怪猎", "Monster Hunter");
-        cn_to_en.insert("怪物猎人崛起", "Monster Hunter Rise");
-        cn_to_en.insert("怪物猎人世界", "Monster Hunter World");
-        cn_to_en.insert("黑神话", "Black Myth Wukong");
-        cn_to_en.insert("黑神话悟空", "Black Myth Wukong");
-        cn_to_en.insert("悟空", "Black Myth Wukong");
-        cn_to_en.insert("赛博朋克", "Cyberpunk 2077");
-        cn_to_en.insert("赛博朋克2077", "Cyberpunk 2077");
-        cn_to_en.insert("2077", "Cyberpunk 2077");
-        cn_to_en.insert("艾尔登法环", "Elden Ring");
-        cn_to_en.insert("老头环", "Elden Ring");
-        cn_to_en.insert("法环", "Elden Ring");
-        cn_to_en.insert("黄金树幽影", "Shadow of the Erdtree");
-        cn_to_en.insert("幻兽帕鲁", "Palworld");
-        cn_to_en.insert("帕鲁", "Palworld");
-        cn_to_en.insert("荒野大镖客", "Red Dead Redemption 2");
-        cn_to_en.insert("大镖客", "Red Dead Redemption 2");
-        cn_to_en.insert("大表哥", "Red Dead Redemption 2");
-        cn_to_en.insert("生化危机", "Resident Evil");
-        cn_to_en.insert("生化危机4", "Resident Evil 4");
-        cn_to_en.insert("生化危机2", "Resident Evil 2");
-        cn_to_en.insert("生化危机3", "Resident Evil 3");
-        cn_to_en.insert("生化危机7", "Resident Evil 7");
-        cn_to_en.insert("生化危机8", "Resident Evil Village");
-        cn_to_en.insert("巫师", "The Witcher 3");
-        cn_to_en.insert("巫师3", "The Witcher 3");
-        cn_to_en.insert("狂猎", "The Witcher 3");
-        cn_to_en.insert("只狼", "Sekiro");
-        cn_to_en.insert("影逝二度", "Sekiro Shadows Die Twice");
-        cn_to_en.insert("战神", "God of War");
-        cn_to_en.insert("战神诸神黄昏", "God of War Ragnarok");
-        cn_to_en.insert("刺客信条", "Assassin's Creed");
-        cn_to_en.insert("博德之门", "Baldur's Gate 3");
-        cn_to_en.insert("博德之门3", "Baldur's Gate 3");
-        cn_to_en.insert("暗黑破坏神", "Diablo");
-        cn_to_en.insert("暗黑4", "Diablo IV");
-        cn_to_en.insert("极品飞车", "Need for Speed");
-        cn_to_en.insert("古墓丽影", "Tomb Raider");
-        cn_to_en.insert("孤岛惊魂", "Far Cry");
-        cn_to_en.insert("辐射", "Fallout");
-        cn_to_en.insert("辐射4", "Fallout 4");
-        cn_to_en.insert("潜行者", "S.T.A.L.K.E.R.");
-        cn_to_en.insert("潜行者2", "S.T.A.L.K.E.R. 2");
-        cn_to_en.insert("双人成行", "It Takes Two");
-        cn_to_en.insert("霍格沃茨", "Hogwarts Legacy");
-        cn_to_en.insert("霍格沃茨之遗", "Hogwarts Legacy");
-        cn_to_en.insert("天国拯救", "Kingdom Come Deliverance");
-        cn_to_en.insert("天国拯救2", "Kingdom Come Deliverance II");
-        cn_to_en.insert("绝地潜兵", "Helldivers");
-        cn_to_en.insert("绝地潜兵2", "Helldivers 2");
-        cn_to_en.insert("哈迪斯", "Hades");
-        cn_to_en.insert("哈迪斯2", "Hades II");
-        cn_to_en.insert("死亡空间", "Dead Space");
-        cn_to_en.insert("对马岛", "Ghost of Tsushima");
-        cn_to_en.insert("对马岛之魂", "Ghost of Tsushima");
-        cn_to_en.insert("卧龙", "Wo Long");
-        cn_to_en.insert("仁王", "Nioh");
-        cn_to_en.insert("仁王2", "Nioh 2");
-        cn_to_en.insert("星空", "Starfield");
-        cn_to_en.insert("潜水员戴夫", "Dave the Diver");
-        cn_to_en.insert("星露谷", "Stardew Valley");
-        cn_to_en.insert("星露谷物语", "Stardew Valley");
-        cn_to_en.insert("泰拉瑞亚", "Terraria");
-        cn_to_en.insert("最终幻想", "Final Fantasy");
-        cn_to_en.insert("最终幻想7", "Final Fantasy VII");
-        cn_to_en.insert("最终幻想16", "Final Fantasy XVI");
-        cn_to_en.insert("装甲核心", "Armored Core VI");
-        cn_to_en.insert("如龙", "Like a Dragon");
-        cn_to_en.insert("八方旅人", "Octopath Traveler");
-        cn_to_en.insert("歧路旅人", "Octopath Traveler");
-        cn_to_en.insert("无主之地", "Borderlands");
-        cn_to_en.insert("鬼泣", "Devil May Cry");
-        cn_to_en.insert("尼尔", "NieR Automata");
-        cn_to_en.insert("空洞骑士", "Hollow Knight");
-        cn_to_en.insert("杀戮尖塔", "Slay the Spire");
-        cn_to_en.insert("死亡细胞", "Dead Cells");
-        cn_to_en.insert("匹诺曹", "Lies of P");
-        cn_to_en.insert("寂静岭", "Silent Hill");
-        cn_to_en.insert("地平线", "Horizon");
-        cn_to_en.insert("剑星", "Stellar Blade");
-        cn_to_en.insert("死亡搁浅", "Death Stranding");
-        cn_to_en.insert("鬼武者", "Onimusha");
-        cn_to_en.insert("大侠立志传", "Hero's Adventure");
-        cn_to_en.insert("庄园领主", "Manor Lords");
-        cn_to_en.insert("合金装备", "Metal Gear Solid");
+
+        const DICT_JSON: &str = include_str!("../data/games_dict.json");
+        if let Ok(v) = serde_json::from_str::<serde_json::Value>(DICT_JSON) {
+            if let Some(games) = v.get("games").and_then(|g| g.as_object()) {
+                for (en, cn_val) in games {
+                    if let Some(cn) = cn_val.as_str() {
+                        let en_lower = en.to_lowercase();
+                        en_to_cn.insert(en_lower.clone(), cn.to_string());
+                        cn_to_en.insert(cn.to_string(), en_lower);
+                    }
+                }
+            }
+            if let Some(aliases) = v.get("aliases").and_then(|a| a.as_object()) {
+                for (alias, en_val) in aliases {
+                    if let Some(en) = en_val.as_str() {
+                        cn_to_en.insert(alias.to_string(), en.to_lowercase());
+                    }
+                }
+            }
+        }
 
         Self {
             store,
@@ -239,16 +89,16 @@ impl FlingScraper {
         let lower = clean_en.to_lowercase().replace("’", "'");
 
         // 1. Direct match
-        if let Some(&cn) = self.en_to_cn.get(lower.as_str()) {
+        if let Some(cn) = self.en_to_cn.get(lower.as_str()) {
             return serde_json::json!({ "cn": cn, "en": clean_en });
         }
 
         // 2. Normalized match (alphanumeric only)
         let norm: String = lower.chars().filter(|c| c.is_alphanumeric()).collect();
-        let mut best_match = None;
+        let mut best_match: Option<&str> = None;
         let mut max_len = 0;
 
-        for (&en_key, &cn_val) in &self.en_to_cn {
+        for (en_key, cn_val) in &self.en_to_cn {
             let en_norm: String = en_key.chars().filter(|c| c.is_alphanumeric()).collect();
             if norm == en_norm {
                 return serde_json::json!({ "cn": cn_val, "en": clean_en });
@@ -256,7 +106,7 @@ impl FlingScraper {
             if en_norm.len() >= 4 && (norm.contains(&en_norm) || en_norm.contains(&norm)) {
                 if en_norm.len() > max_len {
                     max_len = en_norm.len();
-                    best_match = Some(cn_val);
+                    best_match = Some(cn_val.as_str());
                 }
             }
         }
@@ -266,7 +116,7 @@ impl FlingScraper {
         }
 
         // 3. Substring match from Chinese to English dict
-        for (&cn_key, &en_val) in &self.cn_to_en {
+        for (cn_key, en_val) in &self.cn_to_en {
             let en_norm: String = en_val.to_lowercase().chars().filter(|c| c.is_alphanumeric()).collect();
             if norm == en_norm {
                 return serde_json::json!({ "cn": cn_key, "en": clean_en });
@@ -274,7 +124,7 @@ impl FlingScraper {
             if en_norm.len() >= 4 && (norm.contains(&en_norm) || en_norm.contains(&norm)) {
                 if en_norm.len() > max_len {
                     max_len = en_norm.len();
-                    best_match = Some(cn_key);
+                    best_match = Some(cn_key.as_str());
                 }
             }
         }
@@ -341,25 +191,63 @@ impl FlingScraper {
         self.parse_trainer_list(&html_str, page)
     }
 
-    pub async fn search_trainers(&self, query: &str, page: u32) -> Result<serde_json::Value, String> {
+    pub fn resolve_search_term(&self, query: &str) -> (String, bool) {
         let trimmed_query = query.trim();
-        let mut search_term = trimmed_query.to_string();
+        if trimmed_query.is_empty() {
+            return (String::new(), false);
+        }
 
-        // Check if query contains Chinese characters
+        let query_lower = trimmed_query.to_lowercase();
+        let clean_q: String = query_lower.chars().filter(|c| !c.is_whitespace() && c != &'-' && c != &'_' && c != &'：' && c != &':').collect();
+
+        // 1. Direct match (handles Chinese titles, aliases, player acronyms like ff7, p5r, 2077, gta5)
+        if let Some(en) = self.cn_to_en.get(trimmed_query)
+            .or_else(|| self.cn_to_en.get(query_lower.as_str()))
+            .or_else(|| self.cn_to_en.get(clean_q.as_str())) {
+            let is_translated = en.to_lowercase() != query_lower;
+            return (en.clone(), is_translated);
+        }
+
+        // 2. Chinese substring / fuzzy matching
         let has_chinese = trimmed_query.chars().any(|c| ('\u{4e00}'..='\u{9fa5}').contains(&c));
         if has_chinese {
-            let clean_q: String = trimmed_query.chars().filter(|c| !c.is_whitespace() && c != &'-' && c != &'_' && c != &'：' && c != &':').collect();
-            if let Some(&en) = self.cn_to_en.get(trimmed_query).or_else(|| self.cn_to_en.get(clean_q.as_str())) {
-                search_term = en.to_string();
-            } else {
-                for (&cn_key, &en_val) in &self.cn_to_en {
-                    if trimmed_query.contains(cn_key) || cn_key.contains(trimmed_query) {
-                        search_term = en_val.to_string();
-                        break;
+            let mut best_match: Option<&str> = None;
+            let mut best_score: i32 = -1;
+
+            for (cn_key, en_val) in &self.cn_to_en {
+                let clean_key: String = cn_key.to_lowercase().chars().filter(|c| !c.is_whitespace() && c != &'-' && c != &'_' && c != &'：' && c != &':').collect();
+                if clean_key.is_empty() {
+                    continue;
+                }
+
+                if clean_q.contains(&clean_key) {
+                    // Query contains known game/alias keyword (e.g. "黑神话悟空修改器" contains "黑神话")
+                    let score = 1000 + clean_key.chars().count() as i32;
+                    if score > best_score {
+                        best_score = score;
+                        best_match = Some(en_val.as_str());
+                    }
+                } else if clean_key.contains(&clean_q) && clean_q.chars().count() >= 2 {
+                    // Game/alias keyword contains query (e.g. "艾尔登法环" contains "艾尔登")
+                    let diff = (clean_key.chars().count() as i32 - clean_q.chars().count() as i32).abs();
+                    let score = 500 - diff;
+                    if score > best_score {
+                        best_score = score;
+                        best_match = Some(en_val.as_str());
                     }
                 }
             }
+
+            if let Some(en) = best_match {
+                return (en.to_string(), true);
+            }
         }
+
+        (trimmed_query.to_string(), false)
+    }
+
+    pub async fn search_trainers(&self, query: &str, page: u32) -> Result<serde_json::Value, String> {
+        let (search_term, is_translated) = self.resolve_search_term(query);
 
         let url = if page <= 1 {
             format!("{}/?s={}", BASE_URL, urlencoding::encode(&search_term))
@@ -397,7 +285,6 @@ impl FlingScraper {
         if let Some(obj) = res.as_object_mut() {
             obj.insert("query".to_string(), serde_json::json!(query));
             obj.insert("effectiveQuery".to_string(), serde_json::json!(search_term));
-            let is_translated = search_term.to_lowercase() != trimmed_query.to_lowercase();
             obj.insert("isTranslated".to_string(), serde_json::json!(is_translated));
         }
 
@@ -1145,5 +1032,47 @@ mod tests {
             text.clone()
         };
         assert!(summary.ends_with("..."));
+    }
+
+    #[test]
+    fn test_dictionary_and_aliases() {
+        let store = Arc::new(StoreManager::new());
+        let scraper = FlingScraper::new(store);
+
+        // 1. Test alias to English search term resolution
+        let cases = vec![
+            ("黑猴", "black myth: wukong", true),
+            ("老头环", "elden ring", true),
+            ("法环", "elden ring", true),
+            ("大镖客2", "red dead redemption 2", true),
+            ("怪猎荒野", "monster hunter wilds", true),
+            ("2077", "cyberpunk 2077", true),
+            ("生化4", "resident evil 4", true),
+            ("博德3", "baldurs gate 3", true),
+            ("p5r", "persona 5 royal", true),
+            ("ff7", "final fantasy vii remake", true),
+            ("黑神话修改器", "black myth: wukong", true),
+            ("艾尔登", "elden ring", true),
+            ("Elden Ring", "Elden Ring", false),
+        ];
+
+        for (input, expected_term, expected_trans) in cases {
+            let (resolved, is_trans) = scraper.resolve_search_term(input);
+            assert_eq!(resolved, expected_term, "Failed resolving search query '{}'", input);
+            assert_eq!(is_trans, expected_trans, "Failed trans flag for query '{}'", input);
+        }
+
+        // 2. Test English title translation to Chinese
+        let t1 = scraper.translate_game_title("Black Myth: Wukong Trainer");
+        assert_eq!(t1.get("cn").unwrap().as_str().unwrap(), "黑神话：悟空");
+
+        let t2 = scraper.translate_game_title("Elden Ring Trainer");
+        assert_eq!(t2.get("cn").unwrap().as_str().unwrap(), "艾尔登法环");
+
+        let t3 = scraper.translate_game_title("Cyberpunk 2077 Trainer");
+        assert_eq!(t3.get("cn").unwrap().as_str().unwrap(), "赛博朋克 2077");
+
+        let t4 = scraper.translate_game_title("Monster Hunter Wilds Trainer");
+        assert_eq!(t4.get("cn").unwrap().as_str().unwrap(), "怪物猎人：荒野");
     }
 }
