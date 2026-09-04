@@ -1,7 +1,7 @@
 {
   "name": "fling-box",
   "productName": "FLiNG Box",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "FLiNG Box - 现代化风灵月影修改器盒子",
   "scripts": {
     "start": "node scripts/run-tauri.js dev",
