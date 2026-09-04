@@ -3,6 +3,7 @@ node_modules/
 
 # Production & Rust builds
 dist/
+release/
 build/
 target/
 src-tauri/target/
