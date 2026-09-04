@@ -247,7 +247,20 @@ impl FlingScraper {
     }
 
     pub async fn search_trainers(&self, query: &str, page: u32) -> Result<serde_json::Value, String> {
-        let (search_term, is_translated) = self.resolve_search_term(query);
+        let (mut search_term, mut is_translated) = self.resolve_search_term(query);
+
+        // Online translation fallback: If query contains Chinese and was not matched in local dict/aliases,
+        // call the online Google Translate API as fallback to convert it to English
+        let has_chinese = query.trim().chars().any(|c| ('\u{4e00}'..='\u{9fa5}').contains(&c));
+        if has_chinese && !is_translated {
+            if let Ok(online_en) = self.translate_text(query.trim(), "zh-CN", "en").await {
+                let clean_online = online_en.trim();
+                if !clean_online.is_empty() && clean_online.to_lowercase() != query.trim().to_lowercase() {
+                    search_term = clean_online.to_string();
+                    is_translated = true;
+                }
+            }
+        }
 
         let url = if page <= 1 {
             format!("{}/?s={}", BASE_URL, urlencoding::encode(&search_term))
